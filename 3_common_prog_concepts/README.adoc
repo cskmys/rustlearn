@@ -3,3 +3,5 @@
 Basic programming constructs that are present in other programming languages but explained in the context of rust.
 
 include::1_variables/README.adoc[]
+
+include::2_datatypes/README.adoc[]
