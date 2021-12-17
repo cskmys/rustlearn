@@ -4,3 +4,38 @@ The program will generate a random integer between 1 and 100.
 It will then prompt the player to enter a guess.
 After a guess has been entered, the program will indicate whether the guess is too low or too high.
 If the guess is correct, the game will print a congratulatory message and exit.
+
+=== Add library/dependency
+In *Cargo.toml*:
+----
+[package]
+...
+
+[dependencies]
+<lib> = "<ver>"
+----
+[NOTE]
+====
+The version used is semantic versioning.
+Hence, version number *0.8.3* means to build the program Cargo can use any version of library that is at least *0.8.3* and below version *0.9.0*.
+====
+The first time you build after adding this dependency, Cargo downloads the latest available library(within bounds of semantic versioning) and all it's dependencies from https://crates.io/[*crates.io*] registry.
+It compiles all of them as a library which then can be used in the program.
+
+=== Update library
+When Cargo downloads a library and all it's dependencies, it notes down the versions of all of them in *Cargo.lock* file.
+Normally, when a new version of library is released, though the semantic versioning allows Cargo to use it, *Cargo.lock* prevents Cargo from downloading and compiling it.
+This is to prevent issues where a new library version breaks existing code.
+
+If you do want to use new library(within the bounds of semantic versioning), you'll need to do:
+----
+cargo update
+----
+
+If you want to use new library outside the bounds of current semantic versioning, then change the version number and build the project again.
+
+=== Library documentation
+----
+cargo doc --open
+----
+Cargo builds documentation provided by all of your dependencies locally and opens it in your browser.
