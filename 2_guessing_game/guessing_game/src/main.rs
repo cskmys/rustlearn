@@ -28,11 +28,19 @@ fn main() {
         // "read_line(...)" returns "io:Result" which is an enum type in rust which can have 2 options "ok" or "Err"
         // "io:Result" has an "expect" method which returns the value for "ok" and crashes the program and displays the message on "Err"
 
-        let guess: u32 = guess.trim().parse().expect("Please type a number!"); // converts string to 32-bit unsigned integer
+        // let guess: u32 = guess.trim().parse().expect("Please type a number!"); // converts string to 32-bit unsigned integer
         // shadowing the variable name allows you to reuse "guess" instead of having separate ones for string and integer
         // "String::trim()" will remove preceding and leading whitespaces, this is needed cause "read_line" would have read '\n' when the user pressed enter
         // "String::parse()" can parse a string into a variety of data-types, hence "u32" is explicitly specified
         // just like "read_line", "parse" return "Result" too, hence we have "except"
+
+        let guess: u32 = match guess.trim().parse(){
+            Ok(num) => num, // "num" is used to access the result that the "Ok" has along with it
+            Err(_) => { // "_" to say we don't want to access whatever value the "Err" has with it
+                println!("Please type a number!");
+                continue;
+            }
+        }; // previous code would just crash when garbage input was entered, now we have proper handling
 
         println!("You guessed: {}", guess);
         // {} is a place holder for "guess"
