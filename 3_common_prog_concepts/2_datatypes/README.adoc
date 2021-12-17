@@ -92,6 +92,25 @@ Single quotes are for characters and double quotes are for strings.
 ====
 
 ==== Compound
-
+These types can group multiple values into one type.
 ===== Tuple
+General way of grouping values of different types.
+Once declared, cannot change the size.
+
+Tuple without any value, is a special type that has only one value, *()*.
+This type is called unit type and value () is called unit value.
+[NOTE]
+====
+Expressions implicitly return unit value when they have no value to return.
+====
+
 ===== Array
+Way to group multiple values of same type.
+Once declared, cannot change the size.
+AN array is a single chunk of memory of a known, fixed size that can be allocated on the stack.
+
+
+[NOTE]
+====
+Rust performs run-time on the validity of the index used to access the compound data type which prevents invalid memory accesses.
+====
