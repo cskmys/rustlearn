@@ -1,7 +1,7 @@
-== 1.2 Hello, World!
+=== Hello, World!
 
-=== Commands
-==== Compile rust file
+==== Commands
+===== Compile rust file
 ----
 rustc <file>.rs
 ----

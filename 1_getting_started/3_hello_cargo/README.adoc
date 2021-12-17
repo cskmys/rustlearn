@@ -1,7 +1,7 @@
-== 1.3 Hello, Cargo!
+=== Hello, Cargo!
 
-=== Cargo Commands
-==== Create a new project
+==== Cargo Commands
+===== Create a new project
 ----
 cargo new <project>
 ----
@@ -17,7 +17,7 @@ In the directory where you ran the command, this will create:
 Except this command, all other cargo commands are executed inside *<project>/* where *Cargo.toml* resides.
 ====
 
-==== Build
+===== Build
 ----
 cargo build
 ----
@@ -29,20 +29,20 @@ Inside *<project>/*, this will generate:
 *** Some files and folders
 * Cargo.lock (don't ever edit it)
 
-==== Build and Run
+===== Build and Run
 ----
 cargo run
 ----
 If there is no code change it won't build but will just run
 
-==== Check
+===== Check
 This is build but without generating the executable.
 ----
 cargo check
 ----
 Way faster than generating executable and can be used continuously while coding to check the code
 
-==== Build for Release
+===== Build for Release
 Takes longer as it includes optimizations
 ----
 cargo build --release
