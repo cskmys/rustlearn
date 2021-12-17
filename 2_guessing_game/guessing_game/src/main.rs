@@ -9,7 +9,7 @@ fn main() {
     // "thread_rng()" generates a struct which contains the seed and random number generator
     // "gen_range(1..101)" function of the random number generator output by "thread_rng" use the seed to generate a random number in the range [1,100]
 
-    println!("The secret number is: {}", secret_number); // added just for testing
+    // println!("The secret number is: {}", secret_number); // added just for testing
 
     loop {
         println!("Please input your guess.");
