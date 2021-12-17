@@ -1,0 +1,13 @@
+== 1.2 Hello, World!
+
+=== Commands
+==== Compile rust file
+----
+rustc <file>.rs
+----
+This will generate an executable *<file>* which you can run it like you would run any other executable
+
+[NOTE]
+====
+For a simple program with no dependencies, you can use this but for a more complex program you are better off using *Cargo*
+====
