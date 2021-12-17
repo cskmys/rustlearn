@@ -5,4 +5,7 @@
 Following the official Rust https://doc.rust-lang.org/book/[tutorials]
 
 include::1_2_hello_world/README.adoc[]
+
 include::1_3_hello_cargo/README.adoc[]
+
+include::2_guessing_game/README.adoc[]
