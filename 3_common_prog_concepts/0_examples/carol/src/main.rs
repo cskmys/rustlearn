@@ -18,6 +18,6 @@ fn main() {
         for j in (0..i+1).rev(){
             println!("{}", lyric[j]);
         }
-        println!("");
+        println!();
     }
 }

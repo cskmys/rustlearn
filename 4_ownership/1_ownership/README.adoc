@@ -1,0 +1,71 @@
+=== What is Ownership?
+
+Normally, for memory management, programming languages take 2 approaches to free unused memory:
+
+* Let user manage it explicitly: Error prone(dangling pointers, double free, inaccessible memory etc.) and skill and expertise required to write scalable code that is stable.
+* Use a garbage collector: Impacts performance.
+
+Rust, however, by language design thanks to the idea of ownership, makes memory management implicit to the code without having a garbage collector.
+
+==== Ownership Rules
+* Each value has a variable which is called its owner
+* There can be only one owner at a time for a given value
+* When the owner(variable) goes out of scope, the value is lost
+
+==== Variable Scope
+Scope is the range within a program where an item is valid.
+The types whose size is known at compile time are all stored on stack and popped off of stack when they become invalid.
+They can be quickly copied to a new independent instance if they need to be used outside their scope.
+Things are more complex for data stored on heap.
+
+In rust, *str* is a data type which is immutable and whose size is known at compile time whereas *String* is a data type implemented in the standard library which provides mutable string whose size is not known at compile time.
+Hence, *String* is managed on heap.
+Therefore, to use *String*, during runtime memory needs to requested from memory allocator to create *String* and, returned to the memory allocator when the memory is no longer needed when we're done with our *String*.
+
+The request is done explicitly by the code that makes a new *String*, while the return is automatically done once the *String* variable that owns the memory goes out of scope.
+At the end of every scope(closing of the curly bracket) Rust calls a *drop* function.
+The author of the *String* library can write code to return the memory back at this function call.
+
+==== Ways Variables and Data Interact: Move
+Rust imposes ownership rules for data that undergoes shallow copy i,e, only the pointers are copied not the actual data itself.
+The ownership rules are applied to data undergoes deep copy i,e, the data itself is copied in memory and the copied instance is updated with the address of the copied data.
+
+Data types for which the size is known at compilation time(for all valid use cases), undergo deep copy while the rest undergoes shallow copy.
+[IMPORTANT]
+====
+For data types whose size is not known during compilation time, rust never makes deep copies.
+Hence, any automatic copying can be safely assumed to be a shallow one which means it's inexpensive in terms of runtime performance.
+====
+
+When a shallow copy is made if the ownership is not transferred, then double free can happen when the *drop* function is called.
+This transfer of ownership is called as *move*.
+
+==== Ways Variables and Data Interact: Clone
+If despite the performance overhead, for whatever the reason, you do want to make a deep copy, then *clone* method can be used.
+
+==== Stack-Only Data: Copy
+The data types whose size is known at compile time is placed entirely on the stack.
+For such data-types there is no distinction between shallow and deep copy and rust has a trait called *copy* which can be placed on it.
+If a user-defined datatype is entirely stored on stack and uses the *Copy* trait, then no ownership rules are enforced.
+[WARNING]
+====
+If any part of your user-defined datatype is stored on heap, you'll need to implement *drop* trait.
+Implementing *copy* trait along with *drop* trait throws compilation error.
+====
+
+==== Ownership and Functions
+Passing value to a function is same as re-assigning value to a variable.
+It can be shallow or deep copy with *move* or *copy* based on the parameter data-type.
+
+==== Return values and Scope
+Return values can also *move* or *copy* based on if the data type makes a shallow copy or deep copy.
+
+[NOTE]
+====
+In rust you can return multiple values as a tuple.
+====
+
+[IMPORTANT]
+====
+In a tuple if any one of data types go on heap, then whole of the tuple goes on heap and hence undergoes shallow copying and ownership rules apply
+====

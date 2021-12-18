@@ -9,3 +9,5 @@ include::1_getting_started/README.adoc[]
 include::2_guessing_game/README.adoc[]
 
 include::3_common_prog_concepts/README.adoc[]
+
+include::4_ownership/README.adoc[]
