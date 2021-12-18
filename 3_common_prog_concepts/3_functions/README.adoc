@@ -1,0 +1,14 @@
+=== Functions
+
+A function can contain statements and expressions.
+Statements are instructions that perform some action and do not return a value(meaning returns a unit type *()* which means nothing).
+Expressions evaluate to a resulting value.
+A statement can contain an expression.
+
+Unlike *C*, rust doesn't expect forward declaration of functions.
+Functions can reside anywhere in the program.
+
+In function signature you must declare the type for every parameter.
+Hence, the compiler doesn't require you to use a function somewhere in the code to infer the arguments' type.
+
+A function where body ends with an expression will return a value while a function where body ends with a statement doesn't.

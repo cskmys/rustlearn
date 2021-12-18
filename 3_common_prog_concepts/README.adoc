@@ -5,3 +5,9 @@ Basic programming constructs that are present in other programming languages but
 include::1_variables/README.adoc[]
 
 include::2_datatypes/README.adoc[]
+
+include::3_functions/README.adoc[]
+
+=== Comments
+Has same single line and multi-line comments as *C*.
+Additionally, it has documentation comments.
