@@ -11,3 +11,17 @@ When a reference goes out of scope i,e, when drop function is called the memory 
 
 References need not necessarily be read-only.
 They can be used to mutate memory iff the memory that they are referring to is declared as mutable in the first place.
+
+To simplify memory management, rust imposes a rule:
+within a particular scope only one mutable reference to a memory can exist.
+This restriction prevent data corruption from race conditions which occur when a pointer reads a particular memory while another is writing to the same memory.
+Since, race conditions are eliminated at compile time, there's no need for special mechanisms to synchronize the data access.
+
+You can mix mutable reference with any number of immutable references.
+To ensure that the users of immutable references won't unexpectedly have their memory changed, if immutable references are declared:
+
+* before mutable one, compiler invalidates all the immutable ones declared before the mutable one
+* after mutable one, compiler invalidates the mutable one itself
+
+By invalidating references this way, the compiler is imposing a non-lexical lifetime(non-lexical scope) on the reference.
+When a reference is used outside it's (non-lexical) scope compilation error occurs.
