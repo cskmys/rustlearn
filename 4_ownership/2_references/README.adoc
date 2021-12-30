@@ -1,1 +1,13 @@
 === References and Borrowing
+
+To regain the ownership of the shallow-copy parameter that was passed outside the function, it must be returned from the function and collected outside.
+This is a bit annoying to do everytime.
+So, as an alternative, to work with a variable(memory) without gaining ownership of it, a reference to the variable can be used.
+[NOTE]
+====
+The act of creating a reference is called borrowing.
+====
+When a reference goes out of scope i,e, when drop function is called the memory that the reference points to is not deallocated coz the reference never owned it in the first place.
+
+References need not necessarily be read-only.
+They can be used to mutate memory iff the memory that they are referring to is declared as mutable in the first place.
