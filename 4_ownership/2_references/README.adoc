@@ -25,3 +25,5 @@ To ensure that the users of immutable references won't unexpectedly have their m
 
 By invalidating references this way, the compiler is imposing a non-lexical lifetime(non-lexical scope) on the reference.
 When a reference is used outside it's (non-lexical) scope compilation error occurs.
+
+The rust compiler makes sure that there are no dangling references.
