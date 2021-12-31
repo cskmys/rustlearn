@@ -1,0 +1,12 @@
+== Enums and Pattern Matching
+
+It is appropriate when:
+
+* your type has limited possibilities
+* your variable can hold only one value out of those possible
+
+include::1_enum/README.adoc[]
+
+include::2_match/README.adoc[]
+
+include::3_iflet/README.adoc[]

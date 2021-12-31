@@ -13,3 +13,5 @@ include::3_common_prog_concepts/README.adoc[]
 include::4_ownership/README.adoc[]
 
 include::5_structs/README.adoc[]
+
+include::6_enums_pattern_matching/README.adoc[]

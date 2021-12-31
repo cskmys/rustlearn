@@ -1,0 +1,26 @@
+=== Defining an Enum
+
+==== Types of Enums
+
+Enums in rust can be:
+
+* *C* style enums where the value is one among the set of values defined
+* More advanced type where it can enumerate as a type that takes one among different types of structures
+
+==== *Option* Enum
+It is defined in standard library as:
+----
+enum Option<T>{ // enum template
+    None, // enum value for data of type unit struct "struct <struct_name>;"
+    Some(T) // enum value for data of type tuple struct "struct <struct_name>(Template);"
+}
+----
+In other languages where the notion of *Null* exists, a variable can either be *Null* or otherwise.
+Hence, if you use a variable with *Null* value where you are not supposed to, like for example de-referencing a pointer, you can have code crash or unexpected behavior.
+Rust avoids this problem altogether by not having the notion of *Null* either as a pointer or as a value.
+Hence, *Option* enum from standard library can be used to return:
+
+* Unit struct of type *None* when there is no result or an invalid result
+* struct *Some(T)* when there is a valid result
+
+Hence, compiler forces us to perform a check to make sure there is a valid value in and if there is one convert "Option<T>" to regular "T" before using it with another regular "T" variable
