@@ -1,0 +1,7 @@
+== Using Structs to structure related data
+
+Structs allow us to name and package together multiple related values that make a meaningful group.
+
+include::1_creation/README.adoc[]
+
+include::3_methods/README.adoc[]
