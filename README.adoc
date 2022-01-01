@@ -15,3 +15,5 @@ include::4_ownership/README.adoc[]
 include::5_structs/README.adoc[]
 
 include::6_enums_pattern_matching/README.adoc[]
+
+include::7_packages_crates_modules/README.adoc[]

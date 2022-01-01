@@ -1,0 +1,1 @@
+pub mod hosting; // as "front_of_house" is not the root module, "hosting.rs" is searched in folder "front_of_house" under "src" folder to load the code for the module "hosting"

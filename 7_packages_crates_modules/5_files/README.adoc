@@ -1,0 +1,10 @@
+=== Separating modules into different files
+
+When modules get large you might want to move their definitions to a separate file to make code easier to navigate.
+Rust equivalent of *C* language's include statement is:
+----
+use <module_name>;
+----
+using ";" instead of "{" means that content of module needs to loaded from another file.
+If this is in crate root module, module is searched for in file *<module_name>.rs* under *src* folder.
+If this was in non-root module, then module is searched for in file *<module_name>.rs* under *<module_parent>* folder under *src* folder.
