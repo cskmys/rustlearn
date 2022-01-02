@@ -1,0 +1,7 @@
+=== Example Programs
+
+Programs to do the following:
+
+* Find mean, median and mode of a list of integers
+* Convert strings to pig latin
+* Text interface to add employee names to department in a company

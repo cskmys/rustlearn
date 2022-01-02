@@ -15,3 +15,5 @@ include::1_vectors/README.adoc[]
 include::2_strings/README.adoc[]
 
 include::3_hashmaps/README.adoc[]
+
+include::0_examples/README.adoc[]
