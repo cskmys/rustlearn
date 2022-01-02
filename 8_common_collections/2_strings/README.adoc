@@ -1,0 +1,73 @@
+=== Storing UTF-8 encoded text with Strings
+
+In rust a string is a collection of bytes.
+At the core language i,e, as a primitive data type rust has only one string type: *str* which is normally seen in its borrowed form *&str*.
+The borrowed form is a string slice which is a reference to a part of binary which holds the string literals.
+
+The *String* type provided by standard library is a growable, mutable, owned, UTF-8 encoded string type.
+[NOTE]
+====
+Standard library has other string types such as *OsString*, *CString* and *OsStr*, *CStr* which are variants of *String* and *str* types respectively.
+====
+
+==== Indexing into strings
+Many of the same operations available on vectors are available with *String* as well.
+However, you cannot index strings(both *str* and *String*) like you index vectors using *[]* operator.
+
+===== Internal representation
+*String* is a wrapper over *Vec<u8>* while *str* is a string literal stored in binary as contiguous *u8* bytes.
+String "Hola" in UTF-8 takes one byte per character whereas "Здравствуйте" takes two bytes per character.
+Hence, indexing using *[]* can be meaningful when used with one byte per character and be meaningless when used with the rest.
+Therefore, to avoid bugs by returning unexpected values, rust doesn't compile indexing of strings at all.
+[NOTE]
+====
+Indexing operation is expected to take constant time(*O(1)*).
+But with the UTF-8 strings, the program will need to walk from the beginning until the index to determine how many valid characters are present.
+Hence, indexing would no longer be *O(1)*.
+====
+
+===== Bytes, Scalar values and Grapheme Clusters
+Let us consider Sanskrit word "नमस्ते"
+
+. Bytes
++
+18 bytes of *u8* values:
++
+----
+[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164, 224, 165, 135]
+----
+This is how it is stored in the memory
+
+. Unicode scalar values
++
+6 *char* values:
++
+----
+['न', 'म', 'स', '्', 'त', 'े']
+----
+4 are base letters and 2 are diacritics
+
+. Grapheme clusters
++
+4 letters:
++
+----
+["न", "म", "स्", "ते"]
+----
+This is what a person would call as letters which makes up the word
+
+For any human language Rust provides different APIs to interpret the string in desired manner.
+
+==== Slicing String
+Though you cannot index strings you can still create slices into them at the *char* boundaries.
+
+==== Methods of iterating
+Using standard library you can iterate string as *u8* bytes, *char* characters.
+But, iterating as grapheme clusters/letters is too complex and standard library doesn't provide support.
+However, external crates on link:https://crates.io/[crates.io] can provide this support.
+
+==== Strings are not so simple
+Different programming languages make different choices about how to present the complexity involved with strings to the programmer.
+Rust has chosen to force you to handle storing of strings correctly.
+This will make you put more thought into handling UTF-8 data upfront.
+But, this prevents you from having to handle errors involving non-ASCII characters later in your development life cycle.
