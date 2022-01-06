@@ -1,23 +1,7 @@
-= rustlearn
-:doctype: book
-:revnumber: 0.0.0
+= README
 
-Following the official Rust https://doc.rust-lang.org/book/[tutorials]
+Following the official Rust https://doc.rust-lang.org/book/[tutorials].
 
-include::1_getting_started/README.adoc[]
-
-include::2_guessing_game/README.adoc[]
-
-include::3_common_prog_concepts/README.adoc[]
-
-include::4_ownership/README.adoc[]
-
-include::5_structs/README.adoc[]
-
-include::6_enums_pattern_matching/README.adoc[]
-
-include::7_packages_crates_modules/README.adoc[]
-
-include::8_common_collections/README.adoc[]
-
-include::9_error_handling/README.adoc[]
+All the folder are organized as per the tutorial chapters.
+The `notes.adoc` file contains the notes of the particular chapter.
+Each chapter has sub-chapters which in turn has its own notes and/or programming exercises(folders that do not start with a number).
