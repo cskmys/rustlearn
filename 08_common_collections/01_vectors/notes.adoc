@@ -1,0 +1,11 @@
+=== Storing lists of values with `vector`
+
+Vectors allow storing multiple values of same type under a single data structure in a contiguous memory location.
+Useful for list of items.
+
+Though a vector need not know the number of elements at compile time, it will still need to know the size of an element at compile time.
+
+[TIP]
+====
+To make a vector hold data of different types, you can create an enum whose variants are of different types and then create a vector that would hold data of this enum type.
+====

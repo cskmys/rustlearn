@@ -1,0 +1,36 @@
+=== Paths for referring to an item in the module tree
+
+Just like a filesystem needs a path to access its files, the modulesystem also needs path to access its code.
+Tha path can be:
+
+* Absolute path: starts from crate root using the `<crate name>` or `crate`
+* Relative path: starts from current module and uses:
+** `self`: for current module (similar to using `./` in filesystem)
+** `super`: for parent module (similar to using `../` in filesystem)
+** `<identifier>`: for identifier inside the current module (similar to using `<folder_name>/` in filesystem)
+
+Modulesystem paths are constructed using `::` operator just like how unix filesystem uses `/`.
+The type of path used will depend on the project.
+[NOTE]
+====
+Stick to one type throughout the project
+====
+
+Modules are not only useful for organizing code, but they can also define privacy in relation to other modules or parts of the code.
+Everything in a module is by default private which means items in a parent module can't access items in a child module, however, items in a child module can access items in its ancestor(parent, grandparent etc) or sibling modules.
+To expose a module's code to its ancestors you can use `pub` keyword.
+
+==== Relative paths with `super`
+A code can access other code in the context that it is defined.
+That means you can access ancestors without them being defined with `pub` with, just using `super`.
+
+==== Making structs and enums public
+Even if a struct as a whole is defined as public.
+To access its fields using `.` operator or the regular instantiation using `=`, the field should be defined as public.
+Whichever field is not defined as public, cannot be accessed from outside the methods of the struct.
+[WARNING]
+====
+If you make any field of a struct private, you can never instantiate it from outside if a public method of struct doesn't do instantiation of struct.
+====
+
+Enums in contrast, if you declare it as public all its variants are public.

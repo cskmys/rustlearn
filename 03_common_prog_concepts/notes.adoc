@@ -1,0 +1,17 @@
+== Common Programming Concepts
+
+Basic programming constructs that are present in other programming languages but explained in the context of rust.
+
+include::01_variables/notes.adoc[]
+
+include::02_datatypes/notes.adoc[]
+
+include::03_functions/notes.adoc[]
+
+=== Comments
+Has same single line and multi-line comments as *C*.
+Additionally, it has documentation comments.
+
+include::05_controlflow/notes.adoc[]
+
+include::00_examples/notes.adoc[]

@@ -1,0 +1,116 @@
+=== Data Types
+
+Rust is statically typed language that is all the data types are known during the compile-time.
+In most cases the compiler can infer the datatype used, in some cases the variable needs to annotated to explicitly mention the datatype.
+
+Rust has 2 types of data types
+
+* Scalars
+* Compound
+
+==== Scalars
+These represent a single value
+
+===== Integers
+====== Type
+Integer type is written as:
+----
+<sign><size>
+----
+
+* `<sign>` can be
++
+|===
+|Sign | Type |Range
+
+|`u` |unsigned |0 to 2^n^-1
+|`i` |signed |-2^n-1^ to 2^n-1^-1
+|===
+
+* `<size>` can be
+
+** `8`, `16`, `32`, `64`, `128`: size in bits
+** `size`: used for indexing a collection, it depends on the size of address bus which in turn depends upon the CPU architecture
+
+[NOTE]
+====
+The default type is `i32`
+====
+
+====== Value
+Integer value can be written as:
+|===
+|Form | Base type
+
+|<value> |decimal
+|`0x<value>` |hexadecimal
+|`0o<value>` |octal
+|`0b<value>` |binary
+|`b'<value>'` |byte(u8 only)
+|===
+
+In any base type, the digits can be separated by `_`:
+----
+98_222
+0b1111_0000
+----
+
+====== Overflow
+In debug mode, rust checks for overflows and crashes the code.
+In release mode, it doesn't crash the code but performs 2's complement wrapping.
+Hence, for `u8` variable, in release mode, 256 will be written as 0 and 257 as 1 and so on.
+
+[WARNING]
+====
+You should never write a code that relies on the 2's complement wrapping.
+Instead, use the methods in the standard library to specify how you want it to be handled.
+====
+
+===== Float
+Represented in memory as per the IEEE-754 standard.
+The type is represented as:
+----
+f<size>
+----
+where `<size>` is `32` or `64`(default).
+
+===== Boolean
+one byte variable to hold `true` or `false` which are the values used in conditionals.
+
+===== Character
+[IMPORTANT]
+====
+Unlike other languages such as *C* where a character is a 1 byte ASCII value, rust's character is of 1-4 byte Unicode value.
+====
+Written as:
+----
+'<character>'
+----
+[WARNING]
+====
+Single quotes are for characters and double quotes are for strings.
+====
+
+==== Compound
+These types can group multiple values into one type.
+
+[NOTE]
+====
+Rust performs run-time on the validity of the index used to access the compound data type which prevents invalid memory accesses.
+====
+
+===== Tuple
+General way of grouping values of different types.
+Once declared, cannot change the size.
+
+Tuple without any value, is a special type that has only one value, `()`.
+This type is called unit type and value `()` is called unit value.
+[NOTE]
+====
+Expressions implicitly return unit value when they have no value to return.
+====
+
+===== Array
+Way to group multiple values of same type.
+Once declared, cannot change the size.
+An array is a single chunk of memory of a known, fixed size that can be allocated on the stack.

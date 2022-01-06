@@ -1,0 +1,54 @@
+=== To `panic!` or not to `panic!`
+If you call `panic!` there is no way to recover for the calling code.
+However, if you return `Result` you can give calling code options.
+It can choose to attempt to recover from the error and if it cannot recover it can choose to adapt to the error or decide to call `panic!` itself.
+Therefore, returning `Result` is a good default choice.
+Only in few scenarios calling `panic!` is more appropriate.
+
+==== Examples, Prototype code, and Tests
+When you are writing an example to illustrate something specific, robust error handling code will just bloat the code and can make the example less clear.
+[TIP]
+====
+Use `unwrap` instead of writing a `match` or `if let` expression.
+====
+
+When you are prototyping your ideas, you may not have clear idea on how to handle all the types of errors.
+In such as case you can `panic!` with your custom messages as means of leaving clear markers to yourself to come back and handle it in the future.
+[TIP]
+====
+Use `expect` instead of `unwrap` to leave your custom message during panic.
+====
+
+During testing, if a method fails you'd want to fail the whole test.
+[TIP]
+====
+To mark a test as a failure call `unwrap` or `expect`.
+====
+
+==== Cases in which you have information than the compiler
+In some cases, it is more robust to panic in case of unexpected inputs which opens a possibility of failure.
+
+==== Guidelines for Error handling
+It is advisable to panic when code can possibly end up in a bad state.
+A bad state is when an assumption, guarantee, contract or an invariant has been violated such as when there the values passed to your code are invalid, contradictory or missing.
+It is better to panic if there is no way to fix the bad state and one or more of the following conditions are met:
+
+* The bad state is not something that's expected to happen occasionally.
+* Code after this points needs to reply on not being in this bad state.
+* There's no good way to encode this information in the types you use.
+
+When a failure is expected, like in case of invalid user input from UI or a malfunctioning network request etc, it is more appropriate to return a `Result` than panic.
+[NOTE]
+====
+If you are writing a library and where someone is passing invalid values from their code, it is better to panic to force them to fix their code to handle the invalid values themselves before calling your code.
+Passing invalid values without proper checking is a violation of the contract from the library user side.
+Hence, it is not upto you to handle.
+This is mostly for safety reasons to prevent vulnerabilities.
+
+This is why standard library calls panic.
+====
+
+==== Creating custom types for validation
+Many a times, we will need to validate a user input value.
+To validate you can write the validation logic or create a custom data type that executes the validation logic before creating a variable of said the data type.
+The latter is always preferred cause when you pass the value into functions you don't need to validate everytime coz using the custom data type ensures that the value is valid during the creation itself.

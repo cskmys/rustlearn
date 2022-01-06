@@ -1,9 +1,0 @@
-== Understanding Ownership
-
-Ownership is a rust's unique feature that guarantees memory safety without the need for a garbage collector.
-
-include::1_ownership/README.adoc[]
-
-include::2_references/README.adoc[]
-
-include::3_slice/README.adoc[]

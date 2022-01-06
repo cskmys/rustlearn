@@ -1,0 +1,25 @@
+== Managing Growing Projects with Packages, Crates, and Modules
+
+As program size grows, code organization becomes more important.
+Normally, code related to a functionality or a feature is grouped together.
+
+Just like in CPP, rust can expose code as public interfaces and hide code as private implementations with other parts of the code.
+For organization of code and it's identifiers, Rust has the notion of *scope* which is the equivalent of CPP's namespace.
+A *module* can contain a number of scopes.
+A *crate* is a tree of modules that produces a library or an executable.
+A *package* is set of one or more crates to provide a set of functionality.
+[TIP]
+====
+As package grows you can take some of its parts and organize them into separate crates which then becomes the package's external dependencies.
+====
+*Workspaces* are used to manage very large projects with interrelated packages.
+
+include::01_packages_crates/notes.adoc[]
+
+include::02_modules/notes.adoc[]
+
+include::03_paths/notes.adoc[]
+
+include::04_use/notes.adoc[]
+
+include::05_files/notes.adoc[]

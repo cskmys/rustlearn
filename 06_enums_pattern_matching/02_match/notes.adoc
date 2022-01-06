@@ -1,0 +1,17 @@
+=== The `match` control flow operator
+
+`match` is extremely powerful control flow operator that can compare a value against series of patterns and execute code based on the match.
+These patterns are very expressive, and it can be literal values, variable names, wildcards etc.
+When patterns are used, rust compiler exhaustively checks for coverage and makes sure all the cases are handled.
+[NOTE]
+====
+This forces you to handle `None` cases in `Option<T>` instead of assuming something.
+This eliminates all the unexpected behaviors associated with `Null` in other languages in rust.
+====
+
+The comparison happens in order and the code under first match gets executed.
+
+[WARNING]
+====
+When a variable matches a pattern and is bound to the pattern, it can be moved or copied based on whether it's a primitive data type or complex data type
+====

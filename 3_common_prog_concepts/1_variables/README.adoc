@@ -1,8 +1,0 @@
-=== Variables and Mutability
-
-Default immutability of variables is not limiting, in fact, it works to our advantage.
-When a variable is declared as immutable, we never have to worry about it being changed from any other part of the code(or any other thread).
-This compiler guarantee saves us time lost in bug fixes that involves tracking down if and from where the variable is being changed.
-
-Shadowing is not a substitute to creating a mutable variable.
-Shadowing is just re-use of a variable name, and a shadowed variable can have a different data type from the one that it shadows.

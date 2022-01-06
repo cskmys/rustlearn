@@ -1,0 +1,44 @@
+=== Storing keys with associated values in `hashmap`
+
+Hashmaps allow you to lookup(index) data of any type using a key of any type.
+They use a hashing function to map a key and a value by strategically determining where the keys and the values are placed in the memory.
+
+Just like vectors hashmaps store their data on heap.
+Hence, the compiler need not know all its elements in advance.
+However, the compiler needs to know the datatype of the key and value during compile time either by annotation or type inference.
+Just like vectors hashmaps are homogenous meaning all the keys are of same data-type and the same goes with values.
+[TIP]
+====
+We can use the enum hack that we used in vectors to store keys and values of different data types.
+====
+
+==== Creating a new hashmap
+Immutable hashmaps can be programmatically created during runtime with functional programming paradigm.
+
+==== Hashmaps and ownership
+The ownership rules we saw during vectors apply here too.
+Borrowing a particular value or key is considered as if whole hashmap was borrowed.
+
+==== Accessing values in a Hashmap
+Two ways:
+
+* `get`-`match` construct to access an element for a particular key
+* `for` loop to iterate over all the key-value pairs
+
+==== Updating a Hashmap
+When a key-value pair is added, if the key doesn't exist the hashmap is simply updated.
+However, if the key already exists hashmap can be updated in two ways:
+
+* Overwrite existing key value using `insert`
+* Do nothing using `entry`-`or_insert` construct
+
+==== Hashing functions
+Standard library's hashmap uses https://en.wikipedia.org/wiki/SipHash[*SipHash*] hashing function.
+It provides resistance to Denial of Service(DoS) attacks but it is not the fastest algorithm.
+Here, speed was sacrificed for security.
+For your application if speed is too slow, you can specify a different hashing function using `hasher` which is a type that implements `BuildHasher` trait.
+[NOTE]
+====
+You need not implement your own hasher from scratch.
+https://crates.io[crates.io] has ample libraries implementing several common hashing algorithms
+====

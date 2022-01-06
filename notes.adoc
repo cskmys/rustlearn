@@ -1,0 +1,25 @@
+= rustlearn
+:doctype: book
+:revnumber: 0.0.0
+
+Following the official Rust https://doc.rust-lang.org/book/[tutorials]
+
+include::01_getting_started/notes.adoc[]
+
+include::02_guessing_game/notes.adoc[]
+
+include::03_common_prog_concepts/notes.adoc[]
+
+include::04_ownership/notes.adoc[]
+
+include::05_structs/notes.adoc[]
+
+include::06_enums_pattern_matching/notes.adoc[]
+
+include::07_packages_crates_modules/notes.adoc[]
+
+include::08_common_collections/notes.adoc[]
+
+include::09_error_handling/notes.adoc[]
+
+include::10_generics_traits_lifetimes/notes.adoc[]

@@ -1,0 +1,43 @@
+=== Control Flow
+
+In rust `if` and loops are used for control flow.
+
+==== Branching
+There can just `if` or `if` with `else` or `else if` ladder with or without `else`.
+The condition of `if` must be an expression that evaluates to type bool.
+[NOTE]
+====
+No matter what type of `if` is used, Whichever block's condition evaluates to `true` first, gets executed, and the rest are ignored
+====
+
+`if` can be used as a statement where it returns nothing or as an expression where the block that gets executed contains an expression at the end.
+For an expression all blocks should evaluate to return values of same data type as the datatype needs to inferred during compilation.
+
+==== Repetition
+===== loop
+Execute forever until code crash or explicitly told to stop.
+Loop can be designated labels.
+In nested loops `break` and `continue` applies to the innermost loop at the point unless a loop label is specified.
+
+The `break` statement can be made to return a value when it breaks out of the loop, effectively causing a loop to return a value.
+
+===== while
+When a condition is `true`, the block is executed, when it is `false`, a `break` is executed.
+Hence, this is effectively a combination of `loop`, `if`, `else`, and `break`.
+----
+loop{
+    if condition {
+        ...;
+    } else {
+        break;
+    }
+}
+----
+
+===== for
+Used to iterate over elements of a collection.
+A `while` can be used as well, but, that is error-prone and slow(due to run-time checking when using an index to access array element).
+Hence, a `for` is a better fit.
+
+Even in situations where something has to be executed for certain number of times, `for` can be used thanks to `Range` type from standard library.
+Using `for` is more elegant and clean than a `while` in these type of cases.

@@ -1,0 +1,16 @@
+== Getting Started
+
+Just the basics to get you started.
+
+=== Installation
+----
+curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh
+----
+If successful
+----
+Rust is installed now. Great!
+----
+
+include::02_hello_world/notes.adoc[]
+
+include::03_hello_cargo/ntoes.adoc[]

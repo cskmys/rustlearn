@@ -1,0 +1,58 @@
+=== Defining and Instantiating Structs
+
+Structs are similar to tuples as in they can hold different types.
+
+.Differences between tuples and structs:
+|===
+|Struct |Tuple
+
+|Each value is named, so it more clear what the values mean
+|Values are unnamed
+
+|Elements can be accessed in any order using the names.
+Hence, flexible.
+|Order is very important to access the elements.
+Hence, not flexible and error-prone too.
+|===
+
+[IMPORTANT]
+====
+Without use of lifetimes, a struct cannot hold references.
+In other words, struct instances must own its data.
+By using structs to store references, instances can refer data owned by something else.
+But, now instances can potentially have dangling references.
+To avoid this, by language design rust imposes the use of lifetimes to avoid this problem while a struct holds references.
+====
+
+==== struct update syntax
+
+Using the syntax
+----
+let <var_name> = <struct_name>{
+ <field>: <another_var_of_same_struct_type>.<field>,
+ ...
+};
+----
+is equivalent to using the `=` operator.
+Hence, rules related to assignment apply here.
+Therefore, field with complex data types gets moved and fields of primitive data types get copied.
+
+==== Tuple Structs
+
+Struct can be defined without any named field and fields are accessed using destructuring just like tuple.
+This type of structs are called tuple struct.
+The advantage of tuple structs is that it enforces a type for tuples of same datatype.
+For example:
+----
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+----
+Both `Color` and `Point` have fields of same datatype.
+However, a function that accepts `Color` will not accept `Point`.
+
+==== Unit Structs
+
+Just like unit tuples, there exists Unit Structs which are structs without any fields.
+They behave similar to unit tuples `()`.
+
+They are useful when you want to implement a trait on some type but the type do not have any data in itself.

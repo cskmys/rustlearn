@@ -1,0 +1,12 @@
+== Enums and Pattern Matching
+
+It is appropriate when:
+
+* your type has limited possibilities
+* your variable can hold only one value out of those possible
+
+include::01_enum/notes.adoc[]
+
+include::02_match/notes.adoc[]
+
+include::03_iflet/notes.adoc[]
