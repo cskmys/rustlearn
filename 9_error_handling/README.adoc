@@ -1,0 +1,17 @@
+== Error Handling
+
+Rust has a number of features for error handling.
+In many cases rust forces you to take actions for a potential error before successful compilation.
+
+2 categories:
+
+* recoverable: retry again and/or continue
+* unrecoverable: stop the execution
+
+Rust doesn't have exceptions rather *Result<T, E>* for recoverable errors and *panic!* macro for unrecoverable errors
+
+include::1_panic/README.adoc[]
+
+include::2_result/README.adoc[]
+
+include::3_panic_vs_result/README.adoc[]

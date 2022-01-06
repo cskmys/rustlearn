@@ -1,0 +1,24 @@
+=== Unrecoverable errors with *panic!*
+
+Sometimes there is no way to recover from an error/unexpected malfunction in code.
+In these cases you can execute a *panic!* macro to print a failure message, unwind, clean up the stack and quit.
+[NOTE]
+====
+Unwinding means walking back up the stack, cleaning up the data from each function in call stack.
+====
+Alternatively, you can choose to immediately abort without cleaning up the stack in which case memory cleanup will be done by operating system.
+To configure program to abort on *panic!* in *release* mode, in your *Cargo.toml* you can do:
+----
+[profile.release]
+panic = 'abort'
+----
+[NOTE]
+====
+Abort produces a smaller binary size compared to default panic.
+====
+
+To see the whole call stack(backtrace) during panic, run the command:
+----
+RUST_BACKTRACE=1 cargo run
+----
+Using the call stack you can find the point in code which is causing the panic.

@@ -1,0 +1,57 @@
+=== Recoverable errors with *Result*
+
+Most errors are not serious enough to stop the program rather the program can retry and/or adapt and continue.
+*Result<T, E>* is an enum which is widely used to handle potential recoverable errors.
+It has two variants:
+
+* *Ok(T)* where *T* is datatype returned on success
+* *Err(E)* where *E* is error enum type returned on error
+
+==== Matching on Different Errors
+Just like me do a *match* on *Ok* and *Err*, we can do a match on *E* from *Err(E)* to handle type of error.
+
+==== Shortcuts for Panic on Error: *unwrap* and *expect*
+*match* can be a bit too verbose and mayn't convey intent well sometimes.
+*Result<T, E>* has other methods:
+
+* *unwrap*: Takes no arguments.
+If *Result<T, E>* is:
+** *Ok(T)*, it returns *T*
+** *Err(E)*, it calls the *panic!* while passing *E* to it
+* *expect*: Same as *unwrap* but takes a string as an argument.
+In case of *Err(E)*, it passes this string to *panic!* as a message to print during panic while also passing *E* as well just like *unwrap* does.
+
+==== Propagating Errors
+Sometimes you would want to handle an error situation in a function within the function that called this function as it has more context to handle the error.
+In this case, you will need to propagate error to the bottom of the call stack.
+To propagate error you can return data of type *Result<T, E>* where *T* is your result if there were no issues and *E* is the error that you want to propagate in case of an issue.
+In other words, you'll need to wrap your result with *Ok* and error with *Err* before returning them from the function.
+
+===== A shortcut for propagating errors: the *?* operator
+You can use *?* operator on *Result* value, it acts as if you wrote a *match* expression.
+----
+let file_h = File::open(file_name)?;
+----
+is equivalent to:
+----
+let file_h = match File::open(file_name){
+    Ok(f) => f, // return "f" to "file_h" on success
+    Err(e) => return Err(e), // leave function & return "Err(e)" in case of an error
+}
+----
+[TIP]
+====
+You can even chain *?* operator to create eloquent expressions such as:
+----
+File::open(file_name)?.read_to_string(&mut s)?;
+----
+====
+
+===== The *?* operator can be used in functions that return *Result*
+*?* operator on error leaves prematurely from function while returning *Err(e)* and on success returns the value to the expression.
+All you need to do is wrap the final value on success with *Ok* and return it.
+----
+let file_h = File::open(file_name)?;
+return Ok(file_h);
+----
+This way you return value on success and propagate error on failure.

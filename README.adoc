@@ -19,3 +19,5 @@ include::6_enums_pattern_matching/README.adoc[]
 include::7_packages_crates_modules/README.adoc[]
 
 include::8_common_collections/README.adoc[]
+
+include::9_error_handling/README.adoc[]
