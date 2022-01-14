@@ -1,3 +1,29 @@
 == Generic types, Traits, and Lifetimes
 
-tbd
+Generics are abstract stand-ins for concrete types or other properties.
+When we’re writing code, we can express the behavior of generics or how they relate to other generics without knowing what will be in their place when compiling and running the code.
+
+Functions can take parameters of generic type as well instead of concrete type.
+[NOTE]
+====
+`Option<T>`, `Vec<T>`, `HashMap<K, V>`, and `Result<T, E>` are all generic types that we have already encountered.
+====
+Generics effectively reduce code duplication.
+
+Traits are used to define behavior in a generic way.
+[NOTE]
+====
+`move`, `copy`, and `drop` are traits that we have already encountered.
+====
+You can combine traits with generics to create a generic type of particular behavior.
+
+Lifetimes are a variety of generics that tell compiler how references shall relate to each other.
+
+=== Removing duplication by extracting a function
+* Identify duplicate code
+* Extract duplicate code into body of function and specify the input parameters, their data type and the return data type in the function signature
+* Update the instances of duplicated code with the function call
+
+include::01_generics/notes.adoc[]
+
+include::02_traits/notes.adoc[]

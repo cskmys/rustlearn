@@ -1,0 +1,41 @@
+=== Generic Data Types
+Functions, structs, enums and methods all can be defined with generics.
+[NOTE]
+====
+To declare an item as a generic, replace concrete data types in it with a letter to create a generic item.
+
+Just like you can use as many concrete data types as needed, you can use as many generic data types as well.
+For each generic data type, use a different letter.
+====
+[WARNING]
+====
+Using a lot of generics in an item makes the code hard to read.
+It could also indicate that code needs restructuring into smaller pieces.
+====
+
+==== In function definitions
+Here we place generics in the function signature to specify parameter and/or return type as of generic type.
+[IMPORTANT]
+====
+Just changing signature is not enough, you'll need to define its traits as well.
+====
+
+==== In struct definitions
+For the fields you can simply use letters to create generics.
+
+==== In enum definitions
+We have already used `Option<T>` whose variants are `Some<T>` & `None` and `Result<T, E>` whose variants are `Ok(T)` and `Err(E)` ample number of times.
+
+==== In method definitions
+We can declare generic methods for `struct` and `enum` data types.
+But for methods very often you may need to define traits to define the nature of interaction between variables of various type.
+
+You can even define a method only for a particular concrete data type instead of any data type.
+This way, the method is visible only to `struct` or `enum` of that particular concrete data type.
+
+Also, a method of a `struct` can have its own generic type different from the generic data type of its fields.
+
+==== Performance of code using Generics
+During compiler time, compiler performs code monomorphization, which is the process of turning generic code into specific code by filling the generic data types in generic code with the concrete data types that the generic code is called with.
+
+Hence, using generics does not add any undue additional cost.

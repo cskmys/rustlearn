@@ -1,0 +1,112 @@
+=== Traits: Defining shared behavior
+
+Traits define shared behavior in an abstract way.
+In other words, a trait defines functionality a concrete type that replaces the generic type should have and can share with other types.
+It is like saying the generic type can be any data type that has a certain behavior.
+
+==== Defining a trait
+
+The behavior of a type depends on the methods that can be called on it. A trait definition, which is a collection of method signatures, defines the set of behavior that a type needs to have.
+
+Each type implementing this trait must provide its own code that matches the signature of the methods in the trait.
+[NOTE]
+====
+It is similar to how interfaces are implemented in *C++* where you would create a pure abstract class with only virtual methods.
+Any class that inherits the abstract needs to provide its implementation for the virtual methods.
+====
+
+You can implement a trait on a type iff either the trait or the type is local to your crate.
+For example, you can implement your custom trait on `Vec<T>` from standard library, or you can implement trait `Display` from standard library on your custom type.
+However, you cannot implement `Display` on `Vec<T>` both of which belong to standard library and is external to your crate.
+In other words, you cannot implement external trait on an external type.
+This restriction is called *orphan rule* and, it ensures coherence by making sure that other people's code cannot break your code and vice versa.
+For example, if in a library somebody changes behavior of standard library's `Clone` on standard library's `Vec<T>` then when you use that library in your code, `Vec<T>` behavior you have implemented in your code might break due to this library.
+
+==== Default implementations
+We can define a default implementation for a trait which will be used for a type unless a custom behavior is explicitly specified.
+
+A default implementation of a trait can call other trait's non-default implementation.
+
+[IMPORTANT]
+====
+A trait can call other traits but unlike in *C++*, it is not possible to call a default implementation from the override implementation which overrode this default implementation.
+====
+
+==== Traits as Parameters
+In function signature by using `impl` keyword followed by trait name as a function parameter datatype, we can pass an implementation of a particular trait as a parameter.
+[NOTE]
+====
+This is analogous to passing a function pointer in *C/C++*.
+====
+
+===== Traits Bound Syntax
+using `impl`:
+----
+fn func_name(item: &impl trait_name){
+    ...
+}
+----
+is a shorthand for:
+----
+fn func_name<T: trait_name>(item: &T){
+    ...
+}
+----
+You can also send multiple items of same trait type:
+----
+fn func_name(item1: &impl trait_name, item2: &impl trait_name){
+    ...
+}
+----
+which gets deduced to:
+----
+fn func_name<T: trait_name>(item1: &T, item2: &T){
+    ...
+}
+----
+
+===== Specifying Multiple Trait Bounds with the `+` syntax
+using `+` in function signature you can specify an item to have implementations of multiple traits.
+----
+fn func_name(item: &impl trait1_name + trait2_name){
+    ...
+}
+----
+is a shorthand for:
+----
+fn func_name<T: trait1_name + trait2_name>(item: &T){
+    ...
+}
+----
+
+===== Clearer Trait Bounds with `where` clauses
+----
+fn func_name<T: trait1_name + trait2_name, U: trait2_name + trait3_name>(item1: &T, item2: &U) -> return_type {
+    ...
+}
+----
+to make things easier to read, `where` clause can be used as:
+----
+fn func_name<T, U>(item1: &T, item2: &U) -> return_type
+    where T: trait1_name + trait2_name,
+          U: trait2_name + trait3_name {
+    ...
+}
+----
+
+==== Returning Types that Implement Traits
+We can also return a value of some type that implements a trait using `impl`:
+----
+fn func_name() -> impl trait_name{
+    ...
+}
+----
+This is especially useful in the context of closures and iterators where you can just specify the type that implements trait *Iterator* without specifying the actual type which might be very long.
+
+==== Using Trait Bounds to conditionally implement methods
+We use trait bounds to implement methods conditionally wherein a method for a generic structure becomes active iff its generic parameter is of a particular type that implements the trait defined in the trait bound.
+
+We can also implement a trait conditionally if another trait is implemented for a type.
+
+In dynamically typed languages we would get runtime errors if a generic type doesn't implement a particular behavior.
+Using traits and trait bounds rust moves these errors to compilation time ensuring stability during run-time and also, as the check happens during compilation time, we don't need additional checks during run-time as in dynamically typed languages, which leads to performance  improvements without losing flexibility of generics.
