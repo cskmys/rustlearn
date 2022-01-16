@@ -27,3 +27,14 @@ Lifetimes are a variety of generics that tell compiler how references shall rela
 include::01_generics/notes.adoc[]
 
 include::02_traits/notes.adoc[]
+
+include::03_lifetimes/notes.adoc[]
+
+=== Generic type parameters, Traits bounds, and Lifetimes together
+You can just put all the syntaxes together without any problems
+
+=== Summary
+Generic type parameters let you apply the code to different types.
+Traits and trait bounds ensure that even though the types are generic, they’ll have the behavior the code needs.
+Lifetimes ensure that this flexible code won’t have any dangling references.
+And all of this analysis happens at compile time, which doesn’t affect runtime performance!

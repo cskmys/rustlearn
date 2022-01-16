@@ -1,0 +1,184 @@
+=== Validating References with Lifetimes
+
+The lifetime of a reference is its scope for which it is valid.
+Normally this is implicit and inferred but sometimes when it can be interpreted in different ways, it needs to be annotated to make sure there are no ambiguities during compile time which ensures that a reference during runtime will definitely be valid.
+
+[NOTE]
+====
+Annotating lifetime of a reference is a concept unique to rust.
+Most languages don't have this.
+====
+
+==== Preventing dangling references with lifetimes
+A dangling reference is one which points to a memory that has been deallocated and is no longer valid.
+Rust compiler finds all the dangling references using the borrow checker at compile time.
+
+==== The Borrow Checker
+It compares all the scopes to make sure if all the borrows are valid or not.
+Wherever the borrow(reference) is used, the scope of the borrow must overlap with the scope of the data that is borrowed.
+
+==== Generic lifetimes in Functions
+There are many cases wherein during compile time compiler cannot evaluate the scope of a reference.
+Hence, borrow checker cannot do its job.
+[NOTE]
+====
+One common case is when one of references passed to the function as input are returned from the function as output.
+In this case during compile time compiler can't know which reference will be the output reference.
+Hence, borrow checker will not know how to evaluate the overall scope of the returned reference.
+====
+Use lifetimes in function signature only when the lifetimes of parameters and return type is related(connected) to each other.
+
+==== Lifetime annotation Syntax
+In cases where the compiler cannot infer the lifetime of a reference, it relies on the programmer to specify its lifetime by means of an annotation.
+
+A single lifetime annotation by itself does not mean much.
+However, when it is taken with other references(and if present, their annotations), it tells the compiler how various references relates/connects to each other.
+This allows the borrow checker to perform its job by telling it how to infer the lifetimes of references which cannot be implicitly inferred.
+[WARNING]
+====
+Just like type annotation does not change the type of data but rather specifies the type of data that is acceptable.
+Lifetime annotation does not change how long a reference will live but rather specifies the type of reference that is acceptable.
+====
+
+Lifetime annotations syntax is of the form:
+----
+&'<lowercase_letter> <optionally mut> <datatype>
+----
+
+==== Lifetime annotations in function signatures
+In functions the lifetimes are declared as generic parameters.
+These generic lifetime is substituted by a concrete lifetime during compilation.
+
+==== Thinking in terms of lifetimes
+In a function signature that returns a reference, you'll need to specify lifetimes for only the parameters that are related to return reference.
+If an input parameter is independent of the return, you need not specify its lifetime.
+
+==== Lifetime annotations in struct definitions
+Even structs can hold references, but we'll need to specify the lifetime.
+This is to tell the borrow checker that the lifetime of the reference is at least the lifetime of the struct.
+
+==== Lifetime Elision
+
+[TIP]
+====
+Don't bother with this too much.
+Just use your judgement and add lifetimes wherever you deem necessary.
+====
+
+There are few patterns that naturally emerged when rust developers wrote code with lifetimes.
+For such deterministic patterns the compiler has been programmed to pickup lifetimes even if it was not written.
+Hence, these patterns got standardized and lifetimes can be omitted for them.
+
+The compiler behavior to pick up these standard patterns was called lifetime elision rules.
+[NOTE]
+====
+These aren't the rules that programmers need to follow.
+It's the rules that compiler follows to pick up lifetime of references.
+====
+The compiler applies these rules to `fn` and `impl` blocks.
+
+Lifetimes of parameters are called input lifetimes and that of return values is called output lifetimes.
+Rules:
+
+* First rule:
++
+Each parameter that is a reference gets its own lifetime parameter
+
+* Second rule:
++
+If there is exactly one input lifetime parameter, that lifetime is assigned to all output lifetime parameters
+
+* Third rule:
++
+In a method with multiple input lifetime parameters if the first parameter is `&self` or `&mut self`, the lifetime of `self` is assigned to all output lifetime parameters.
+
+===== Examples
+In the following examples we will take few function signatures written by programmers without any lifetime annotations and illustrate the application of elision rules by the compiler to infer the lifetimes of parameters n return data.
+
+* Example 1
++
+----
+fn first_word(s: &str) -> &str {
+----
++
+Compiler applies first rule to get:
++
+----
+fn first_word<'a>(s: &'a str) -> &str {
+----
++
+Compiler applies second rule to get:
++
+----
+fn first_word<'a>(s: &'a str) -> &'a str {
+----
+
+* Example 2
++
+----
+fn longest(x: &str, y: &str) -> &str {
+----
++
+Compiler applies first rule to get:
++
+----
+fn longest<'a, 'b>(x: &'a str, y: &'b str) -> &str {
+----
++
+Neither the second rule nor the third rule can be applied coz the there are multiple input parameters, and it is a function not a method.
++
+In the end, the compiler has no idea about the lifetime of return, hence, it will throw an error and expect programmer to annotate.
+
+* Example 3
++
+----
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 {
+----
++
+Compiler applies first rule:
++
+----
+impl<'a> ImportantExcerpt<'a> {
+    fn level<'a>(&'a self) -> i32 {
+----
+
+* Example 4
++
+----
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_n_return_part(&self, announcement: &str) -> &str {
+----
++
+Compiler applies first rule:
++
+----
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_n_return_part<'a, 'b>(&'a self, announcement: &'b str) -> &str {
+----
++
+I think(meaning it's a guess and am not 100% sure) `&self` will get the lifetime `'a` because it is referring to the structure itself.
++
+Compiler applies third rule:
++
+----
+impl<'a> ImportantExcerpt<'a> {
+    fn announce_n_return_part<'a, 'b>(&'a self, announcement: &'b str) -> &'a str {
+----
++
+I think(meaning it's a guess and am not 100% sure) after this compiler will figure out which is the smallest lifetime among the generic lifetimes `'a` and `'b` and will apply that as the concrete lifetime everywhere in the above code snippet before the borrow checker does its job.
+
+
+==== Lifetime annotations in method definitions
+Lifetime names for struct fields always need to be declared after the `impl` keyword and then used after the struct's name coz the lifetimes are part of the struct's type.
+
+Lifetime elision rules apply here as well, so in some cases you may omit writing the lifetime.
+
+==== The static lifetime
+This is where the lifetime of a reference is the entire duration of the program.
+Here, instead of the lowercase letter, `static` is used to specify the lifetime.
+[WARNING]
+====
+Don't use `static` just to avoid a dangling reference.
+Use it only if you want the reference to live during the entirety of the program.
+====
