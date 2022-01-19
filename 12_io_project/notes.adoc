@@ -90,3 +90,6 @@ You can use `unwrap` and similar methods to get the value upon success and error
 Using `unwrap` means you'll need to do pattern matching, instead you can `unwrap_or_else` which behaves same as `unwrap` during success and allows you to write a code in closure upon failure.
 ====
 Wherever you want to exit the program upon error you can use `std::process::exit`.
+
+==== Extracting logic from `main`
+Move all the post configuration program logic into a function called `run`.
