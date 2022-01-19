@@ -1,0 +1,6 @@
+=== Closures: Anonymous functions that can capture their Environment
+
+Closures are anonymous functions that can be saved in a variable or passed as arguments to other functions.
+
+==== Creating an abstraction of behavior with closures
+

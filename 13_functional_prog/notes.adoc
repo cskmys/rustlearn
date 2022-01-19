@@ -1,0 +1,6 @@
+== Functional language features: Iterators and Closures
+
+Functional programming often includes using functions as values by passing them in arguments, returning them from other functions, assigning them to variables for later execution etc.
+Iterators and closures are the key foundation to doing this.
+
+include::01_closures/notes.adoc[]
