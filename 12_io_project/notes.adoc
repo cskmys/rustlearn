@@ -118,3 +118,7 @@ TDD stands for test driven development which is a software development technique
 
 ==== Writing a failing test
 Write your test case and write enough library code just to make the test case compile, not to pass it.
+
+==== Writing code to pass the test
+First write your idea as a very top level pseudocode/algorithm in comments.
+Then work through each step in your pseudocode

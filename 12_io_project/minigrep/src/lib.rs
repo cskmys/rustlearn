@@ -3,12 +3,11 @@ mod tests {
     use crate::search;
 
     #[test]
-    fn one_result() { // building a test case
+    fn one_result() {
         let query = "duct";
         let contents = "Rust:\nsafe, fast, productive.\nPick three.";
 
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents)); // "search" is a function that you'd like to build via TDD
-        // it takes a query and contents of a file as a "&str" as input and return the vector of lines where the string is present as output
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
     }
 }
 
@@ -37,7 +36,11 @@ pub fn run(config: Config) -> Result<(), Box<dyn error::Error>>{
     Ok(())
 }
 
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> { // lifetime applied to "contents" and return as "contents" is the parameter that is connected to the output
-    // hence, "contents" should be alive at least as long as the output
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    // iterate through each line of the "contents"
+    // check whether the lie contains our "query":
+    //     if it does, add it to the list values to return
+    //     else, do nothing
+    // return the list of results that match
     vec![]
 }
