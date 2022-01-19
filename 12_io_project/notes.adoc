@@ -93,3 +93,10 @@ Wherever you want to exit the program upon error you can use `std::process::exit
 
 ==== Extracting logic from `main`
 Move all the post configuration program logic into a function called `run`.
+
+===== Returning errors from `run` function
+Even `run` function can handle non-panic errors by returning `Result<T, E>` to `main` function
+
+===== Handling errors from `run` in `main`
+This time you get nothing upon success but something upon failure, so you can use something like `if let` construct or `unwrap_or_else` function instead of just `unwrap` or similar functions.
+But, `if let` construct is more verbose and readable in this case, you better to use that.
