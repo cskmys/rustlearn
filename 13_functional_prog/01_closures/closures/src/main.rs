@@ -14,18 +14,19 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 }
 
 fn generate_workout(intensity: u32, random_number: u32){
-    let expensive_result = simulated_expensive_calculation(intensity); // refactoring by eliminating function call duplication
+    let expensive_closure = |val| {
+        simulated_expensive_calculation(val) // moving the function call inside a closure
+    };
 
     if intensity < 25 {
-        println!("Today, do {} pushups!", expensive_result);
-        println!("Next, do {} situps!", expensive_result);
+        println!("Today, do {} pushups!", expensive_closure(intensity)); // wherever closure is used, only there expensive computation is done
+        println!("Next, do {} situps!", expensive_closure(intensity)); // but now, we reintroduced problem of calling expensive computation twice
     } else {
         if random_number == 3 {
             println!("Take a break today! Remember to stay hydrated!");
-            // if "intensity" is <= 25 and "random_number" is 3, then no need to run the expensive calculation
-            // but we are running it
+            // now we are no longer calling the expensive computation
         } else {
-            println!("Today, run for {} minutes!", expensive_result);
+            println!("Today, run for {} minutes!", expensive_closure(intensity));
         }
     }
 }
