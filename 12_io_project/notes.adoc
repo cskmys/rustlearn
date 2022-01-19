@@ -105,3 +105,16 @@ But, `if let` construct is more verbose and readable in this case, you better to
 Move `run` function and all its relevant functions and structs to a new `src/lib.rs` file.
 Use `pub` to make the relevant code among the moved code public.
 Use `use` to bring the necessary public code in `lib.rs` in scope in `main.rs`.
+
+Now you can perform tests on your logic by directly calling the functions with various arguments and checking return values without running the binary from the command line.
+
+=== Developing the library's functionality with TDD
+TDD stands for test driven development which is a software development technique that follows these steps:
+
+* Write a test that fails and run it to make sure it fails for the reason you expect
+* Write or modify just enough code to make the new test pass
+* Refactor the code you just added or changed and make sure that all the existing tests continue to pass
+* Repeat
+
+==== Writing a failing test
+Write your test case and write enough library code just to make the test case compile, not to pass it.
