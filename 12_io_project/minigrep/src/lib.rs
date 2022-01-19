@@ -20,11 +20,12 @@ mod tests {
 }
 
 use std::{fs, error, env};
+use std::ops::Not;
 
 pub struct Config {
     pub query: String,
     pub filename: String,
-    pub case_sensitive: bool // configuration option added to switch between the type of search based on the environment variable
+    pub case_sensitive: bool
 }
 
 impl Config {
@@ -34,9 +35,21 @@ impl Config {
         }
         let query = args[1].clone();
         let filename = args[2].clone();
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        // now the user can enter "true" or "false" as the fourth argument to say whether search should be case insensitive or not
+        // if the 4th argument is neither "true" or "false", then program will check for the existence of "CASE_INSENSITIVE" environment variable
+        // if the user doesn't provide any 4th argument, then directly check for the existence of "CASE_INSENSITIVE" environment variable
+        let case_sensitive = if args.len() >= 4 {
+            args[3].clone().parse().unwrap_or_else(|_|{
+                Config::does_case_insensitive_env_var_exist()
+            }).not()
+        } else {
+            Config::does_case_insensitive_env_var_exist()
+        };
 
         Ok(Config {query, filename, case_sensitive})
+    }
+    fn does_case_insensitive_env_var_exist() -> bool {
+        env::var("CASE_INSENSITIVE").is_err()
     }
 }
 
@@ -67,9 +80,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 
 pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    let query = query.to_lowercase(); // shadowing "query" with its lowercase "String" version
-    // "to_lowercase" generates new "String" and doesn't work well with all the unicode
-    // since we are reading arguments using "std::env::args()" we can't read unicode anyways
+    let query = query.to_lowercase();
     let mut res = Vec::new();
     for line in contents.lines() {
         if line.to_lowercase().contains(&query) {
