@@ -34,10 +34,6 @@ impl Config {
         }
         let query = args[1].clone();
         let filename = args[2].clone();
-        // now the user can enter "true" or "false" as the fourth argument to say whether search should be case sensitive or not
-        // if the 4th argument is neither "true" or "false", then program will return an error
-        // if the user doesn't provide any 4th argument, then directly check for the existence of "CASE_SENSITIVE" environment variable
-        // we just ignore arguments after the 4th argument
         let case_sensitive = if args.len() >= 4 {
             args[3].clone().parse().or_else(|_|{
                 Err("Invalid case-sensitivity argument")

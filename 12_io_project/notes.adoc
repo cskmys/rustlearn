@@ -131,5 +131,16 @@ After you have built your function to your satisfaction, add it to your `run` me
 === Working wih Environment variables
 Apart from command line arguments, we can also use environment variables to configure the behavior of our program.
 Environment variables can be accessed from `std::env::var` function which returns `Result<String, VarError>` i.e. it returns value of environment variable wrapped in `Ok` if it exists otherwise returns a `Err(VarError)`.
+
 If you just want to check existence of the environment variable without worrying about its value, it's sufficient to check if there's an error return using `is_err` function which returns `true` when there's an error and vice-versa.
 If you want to get the actual value of the environment variable, then unwrap or pattern match the result to extract the value in `Ok` upon success.
+If you want to get a closure upon `Result` without unwrapping it, you can use `or` and similar functions.
+
+=== Writing Error messages to Standard Error instead of Standard Output
+Normally, program outputs are written to standard output and error messages are written to standard error.
+[NOTE]
+====
+Having output and error messages on different streams gives flexibility to log each of them on whichever way desired.
+====
+`println` macro outputs to standard output.
+You can use `eprintln` macro to output to standard error.
