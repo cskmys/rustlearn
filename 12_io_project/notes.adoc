@@ -57,10 +57,10 @@ If command line parsing logic is small you can keep it in `main.rs` otherwise mo
 
 This way you can test all the code that gets called from `main` function thoroughly and the code within the `main` function will be small enough to verify its correctness by just reading it.
 
-==== Extracting the argument parser
+===== Extracting the argument parser
 Move the argument parsing logic in the `main` function to another function within `main.rs` or `lib.rs` depending on the length of parsing logic
 
-==== Grouping configuration values
+===== Grouping configuration values
 After parsing the arguments you can group the configuration values under a `Config` struct.
 [TIP]
 ====
@@ -71,6 +71,12 @@ After parsing the arguments you can group the configuration values under a `Conf
 * Don't be obsessed with primitive data types and be open to using complex data types when you can make gains in terms of code simplicity, scalability or readability.
 ====
 
-==== Creating a constructor for `Config`
+===== Creating a constructor for `Config`
 If all that your parsing function is doing is creating an instance of your `Config` struct, then you can delete this function and move all the logic inside it to a constructor of `Config` struct.
+
+==== Fixing the Error Handling
+After setting up the minimal working logic, move to handling errors.
+
+===== Improving the Error message
+Write your own error messages and cause panic upon errors everywhere.
 
