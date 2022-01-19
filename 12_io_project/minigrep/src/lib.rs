@@ -1,13 +1,13 @@
 #[cfg(test)]
 mod tests {
-    use crate::{search, search_case_insensitive};
+    use crate::{search_case_sensitive, search_case_insensitive};
 
     #[test]
     fn case_sensitive() {
         let query = "duct";
         let contents = "Rust:\nsafe, fast, productive.\nPick three.\nDuct tape.";
 
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+        assert_eq!(vec!["safe, fast, productive."], search_case_sensitive(query, contents));
     }
 
     #[test]
@@ -20,7 +20,6 @@ mod tests {
 }
 
 use std::{fs, error, env};
-use std::ops::Not;
 
 pub struct Config {
     pub query: String,
@@ -35,21 +34,22 @@ impl Config {
         }
         let query = args[1].clone();
         let filename = args[2].clone();
-        // now the user can enter "true" or "false" as the fourth argument to say whether search should be case insensitive or not
-        // if the 4th argument is neither "true" or "false", then program will check for the existence of "CASE_INSENSITIVE" environment variable
-        // if the user doesn't provide any 4th argument, then directly check for the existence of "CASE_INSENSITIVE" environment variable
+        // now the user can enter "true" or "false" as the fourth argument to say whether search should be case sensitive or not
+        // if the 4th argument is neither "true" or "false", then program will return an error
+        // if the user doesn't provide any 4th argument, then directly check for the existence of "CASE_SENSITIVE" environment variable
+        // we just ignore arguments after the 4th argument
         let case_sensitive = if args.len() >= 4 {
-            args[3].clone().parse().unwrap_or_else(|_|{
-                Config::does_case_insensitive_env_var_exist()
-            }).not()
+            args[3].clone().parse().or_else(|_|{
+                Err("Invalid case-sensitivity argument")
+            })
         } else {
-            Config::does_case_insensitive_env_var_exist()
-        };
+            Ok(Config::does_case_sensitive_env_var_exist())
+        }?;
 
         Ok(Config {query, filename, case_sensitive})
     }
-    fn does_case_insensitive_env_var_exist() -> bool {
-        env::var("CASE_INSENSITIVE").is_err()
+    fn does_case_sensitive_env_var_exist() -> bool {
+        env::var("CASE_SENSITIVE").is_ok()
     }
 }
 
@@ -57,7 +57,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn error::Error>>{
     let contents = fs::read_to_string(config.filename)?;
 
     let res = if config.case_sensitive {
-        search(&config.query, &contents)
+        search_case_sensitive(&config.query, &contents)
     } else {
         search_case_insensitive(&config.query, &contents)
     };
@@ -69,7 +69,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn error::Error>>{
     Ok(())
 }
 
-pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_sensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut res = Vec::new();
     for line in contents.lines() {
         if line.contains(query) {
