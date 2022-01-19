@@ -80,3 +80,13 @@ After setting up the minimal working logic, move to handling errors.
 ===== Improving the Error message
 Write your own error messages and cause panic upon errors everywhere.
 
+===== Returning a `Result<T, E>` instead of `panic!`
+Now wherever appropriate you can selectively change panics to returning `Result<T, E>`.
+
+===== Handle `Result<T, E>`
+You can use `unwrap` and similar methods to get the value upon success and error return upon failure.
+[TIP]
+====
+Using `unwrap` means you'll need to do pattern matching, instead you can `unwrap_or_else` which behaves same as `unwrap` during success and allows you to write a code in closure upon failure.
+====
+Wherever you want to exit the program upon error you can use `std::process::exit`.
