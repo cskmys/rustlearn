@@ -100,3 +100,8 @@ Even `run` function can handle non-panic errors by returning `Result<T, E>` to `
 ===== Handling errors from `run` in `main`
 This time you get nothing upon success but something upon failure, so you can use something like `if let` construct or `unwrap_or_else` function instead of just `unwrap` or similar functions.
 But, `if let` construct is more verbose and readable in this case, you better to use that.
+
+==== Splitting code into a library crate
+Move `run` function and all its relevant functions and structs to a new `src/lib.rs` file.
+Use `pub` to make the relevant code among the moved code public.
+Use `use` to bring the necessary public code in `lib.rs` in scope in `main.rs`.
