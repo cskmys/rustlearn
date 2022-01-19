@@ -27,3 +27,30 @@ Using `collect` on `std::env::args()` turns the iterator returned by it into a v
 `std::fs::read_to_string(file_name)` is used to read the file.
 It takes in a filename, opens the file, reads its contents and returns them as `Result<String>` meaning, upon success you'll get `Ok(String)` and on failure you'll get `Err(String)`.
 
+=== Refactoring to improve Modularity and Error Handling
+[IMPORTANT]
+====
+Make code changes in small units and continuously execute to check for correctness.
+====
+
+==== Separation of concerns for binary projects
+In a binary project programmers tend to write multiple tasks within the `main` function.
+As the project grows large this can be problematic.
+Rust community recommends splitting your program into a `main.rs` & `lib.rs` and move your program logic to `lib.rs`
+
+The `main` function should be limited to performing:
+
+* Parsing command line arguments
++
+[NOTE]
+====
+If command line parsing logic is small you can keep it in `main.rs` otherwise move it to `lib.rs`
+====
+* Setting up any other configuration
+* Calling a `run` function in `lib.rs`
+* Handling the error if `run` returns an error
+
+This way you can test all the code that gets called from `main` function thoroughly and the code within the `main` function will be small enough to verify its correctness by just reading it.
+
+==== Extracting the argument parser
+Move the argument parsing logic in the `main` function to another function within `main.rs` or `lib.rs` depending on the length of parsing logic
