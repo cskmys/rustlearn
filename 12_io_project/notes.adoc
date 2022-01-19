@@ -127,3 +127,9 @@ After this write more failing test cases and iteratively build the code to pass 
 
 ==== Integration with `run`
 After you have built your function to your satisfaction, add it to your `run` method directly or indirectly through another function(s) which would call your new function.
+
+=== Working wih Environment variables
+Apart from command line arguments, we can also use environment variables to configure the behavior of our program.
+Environment variables can be accessed from `std::env::var` function which returns `Result<String, VarError>` i.e. it returns value of environment variable wrapped in `Ok` if it exists otherwise returns a `Err(VarError)`.
+If you just want to check existence of the environment variable without worrying about its value, it's sufficient to check if there's an error return using `is_err` function which returns `true` when there's an error and vice-versa.
+If you want to get the actual value of the environment variable, then unwrap or pattern match the result to extract the value in `Ok` upon success.
