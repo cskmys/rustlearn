@@ -122,3 +122,5 @@ Write your test case and write enough library code just to make the test case co
 ==== Writing code to pass the test
 First write your idea as a very top level pseudocode/algorithm in comments.
 Then translate each line in your pseudocode to code while running the tests to make sure they continue to fail until you have worked through the whole pseudocode.
+
+After this write more failing test cases and iteratively build the code to pass all the possible test cases
