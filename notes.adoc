@@ -25,3 +25,5 @@ include::09_error_handling/notes.adoc[]
 include::10_generics_traits_lifetimes/notes.adoc[]
 
 include::11_automated_tests/notes.adoc[]
+
+include::12_io_project/notes.adoc[]

@@ -1,0 +1,29 @@
+== An I/O Project: Building a Command Line Program
+
+In this project we build our own version of the command line tool `grep` that interacts with file and command line io.
+[NOTE]
+====
+`grep` stands for *g*-lobally search a *r*-egular *e*-xpression and *p*-rint.
+In the simplest of the use cases, it takes as its arguments a filename and a string, reads the file, searches for the lines that contain a specified string and prints those lines.
+====
+
+[IMPORTANT]
+====
+*To follow this section follow the git history to follow the code evolution and the notes in the comments*
+====
+
+=== Accepting Command Line Arguments
+
+==== Reading the argument values
+`std::env::args()` is used to read the command line arguments.
+It will panic if unicode values are entered.
+For taking unicode input you can use `std::env::args_os`, which returns `OsString`, whose values differ based on the OS, instead of `String`.
+For the sake of simplicity we choose to not deal with unicode at the moment.
+
+==== Saving the argument values in variables
+Using `collect` on `std::env::args()` turns the iterator returned by it into a vector of all the command line arguments produced by it.
+
+=== Reading a file
+`std::fs::read_to_string(file_name)` is used to read the file.
+It takes in a filename, opens the file, reads its contents and returns them as `Result<String>` meaning, upon success you'll get `Ok(String)` and on failure you'll get `Err(String)`.
+
