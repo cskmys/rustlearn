@@ -32,6 +32,11 @@ It takes in a filename, opens the file, reads its contents and returns them as `
 ====
 Make code changes in small units and continuously execute to check for correctness.
 ====
+[TIP]
+====
+On the first pass always go for the simplest implementation.
+Resist the strong temptation to pre-optimize i.e. do not try to write hyper-optimized code on your first pass.
+====
 
 ==== Separation of concerns for binary projects
 In a binary project programmers tend to write multiple tasks within the `main` function.
@@ -54,3 +59,14 @@ This way you can test all the code that gets called from `main` function thoroug
 
 ==== Extracting the argument parser
 Move the argument parsing logic in the `main` function to another function within `main.rs` or `lib.rs` depending on the length of parsing logic
+
+==== Grouping configuration values
+After parsing the arguments you can group the configuration value under a struct.
+[TIP]
+====
+* Whenever you are returning a tuple from a function, if they are related to same function then it is meaningful to group them together under a struct
+
+* It is ok to trade a little performance to gain code simplicity and readability.
+
+* Don't be obsessed with primitive data types and be open to using complex data types when you can make gains in terms of code simplicity, scalability or readability.
+====
