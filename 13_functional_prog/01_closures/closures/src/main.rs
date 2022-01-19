@@ -14,14 +14,18 @@ fn simulated_expensive_calculation(intensity: u32) -> u32 {
 }
 
 fn generate_workout(intensity: u32, random_number: u32){
+    let expensive_result = simulated_expensive_calculation(intensity); // refactoring by eliminating function call duplication
+
     if intensity < 25 {
-        println!("Today, do {} pushups!", simulated_expensive_calculation(intensity)); // same expensive computation performed several times
-        println!("Next, do {} situps!", simulated_expensive_calculation(intensity));
+        println!("Today, do {} pushups!", expensive_result);
+        println!("Next, do {} situps!", expensive_result);
     } else {
         if random_number == 3 {
             println!("Take a break today! Remember to stay hydrated!");
+            // if "intensity" is <= 25 and "random_number" is 3, then no need to run the expensive calculation
+            // but we are running it
         } else {
-            println!("Today, run for {} minutes!", simulated_expensive_calculation(intensity));
+            println!("Today, run for {} minutes!", expensive_result);
         }
     }
 }
