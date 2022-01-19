@@ -1,0 +1,20 @@
+== Writing Automated Tests
+
+Correctness of a program is the extent to which a program does what it is intended to do.
+
+[quote, Edsger W. Dijkstra]
+----
+Program testing can be a very effective way to show the presence of bugs, but it is hopelessly inadequate for showing their absence.
+----
+
+Rust with its type system and borrow checker etc. is highly geared towards correctness of a program.
+It even has language level support for writing automated software tests
+
+Rust provides means to assert a function's output for a given input.
+These can be used to create automated tests that can be run every time after making code changes,
+
+include::01_writing/notes.adoc[]
+
+include::02_test_control/notes.adoc[]
+
+include::03_test_organization/notes.adoc[]

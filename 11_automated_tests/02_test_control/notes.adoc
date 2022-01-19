@@ -1,0 +1,80 @@
+=== Controlling how tests are run
+
+Doing:
+----
+cargo test
+----
+compiles code as test binary and runs all the tests in parallel(using threads) and captures the output generated during the test runs.
+[NOTE]
+====
+On the test output you might have observed that all the test names are not in the order that they were written in file, this is coz the tests are run in parallel.
+Running tests in parallel makes test completion quicker.
+
+Capturing output of each test is very helpful as it prevents multiple tests from using stdout to display their messages at the same time.
+====
+
+Some command line options go to `cargo test` and some to the resulting test binary.
+These two types are seperated using `--`:
+----
+cargo test <options for cargo test> -- <options for test binary>
+----
+
+[TIP]
+====
+To get the list of options you can use with `cargo test`:
+----
+cargo test --help
+----
+To get the list of options you can use with test binaries:
+----
+cargo test -- --help
+----
+====
+
+==== Running tests in parallel or consecutively
+You can use the default behavior of running tests in parallel when your tests don't depend on each other or use any shared state(including environment variables such as current working directory etc).
+
+You can control number of threads used to run the test using:
+----
+cargo test -- --test-threads=<nb_threads>
+----
+If `nb_threads` above, is 1, then the tests are run sequentially.
+
+==== Showing function output
+The print messages in the code which are not related to `panic!` or `Err` are shown only when the test fails.
+To show it even during the test pass use:
+----
+cargo test -- --show-output
+----
+
+==== Running a subset of tests by name
+You can even run a subset of tests instead of the whole test suite.
+
+===== Running single tests
+By doing as below you can run a particular test function:
+----
+cargo test <test_name>
+----
+[WARNING]
+====
+If you do:
+----
+cargo test <test_name1> <test_name3> ... <test_name7>
+----
+It simply executes the first test name and ignores the rest.
+====
+
+===== Filtering to run multiple tests
+By using a substring that is common to multiple tests as the `test_name` above, you can execute multiple tests together and ignore the rest.
+
+==== Ignoring some tests unless specifically requested
+To exclude a test from running, you can annotate it with `ignore` attribute under the `test` attribute.
+[WARNING]
+====
+When you add an `ignore` attribute to a test, even if you specifically try to run this test or apply a filter that matches its name, it will still be excluded.
+====
+
+To run only the tests with `ignore` attribute:
+----
+cargo test -- --ignored
+----

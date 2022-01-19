@@ -1,0 +1,114 @@
+=== Test Organization
+
+2 main categories of test:
+
+* Unit Tests
+* Integration Tests
+
+==== Unit Tests
+Small and focused, test each unit of code(module) in isolation, and can test both public and private interfaces.
+Effectively, unit tests check different parts of a library separately to quickly pinpoint where the code isn't working as expected.
+
+Convention is to keep code and its unit tests in the same file.
+In each file, unit tests are written under the module `tests` annotated with `\#[cfg(test)]` which contains the test functions annotated with `#[test]`.
+
+===== The tests module and `#[cfg(test)]`
+`#[cfg(test)]` annotation tells compiler to compile the module as a separate test binary and run only when `cargo test` is executed, not when cargo's build or run command is executed.
+[NOTE]
+====
+`#[cfg(test)]` annotation makes sure that the unit test code doesn't get compiled with the regular binary which is compiled upon `cargo build`.
+====
+
+Attribute `cfg` tells compiler to compile annotated code for a particular configuration.
+Option `test` in `cfg(test)` tells compiler to compile code for test configuration.
+
+===== Testing private functions
+If you want to test private code items, as the unit tests and the code items reside in the same file(meaning they are siblings), you can use their path to bring them into scope within the `tests` module and test them.
+
+==== Integration Tests
+Units of code which work correctly may give rise to problems when they are put together.
+Hence, we need to test the integrated code as well.
+
+Integration tests use your library in the same way any other external code would, using only public interfaces.
+It may also use multiple modules per test.
+Effectively, integration tests are entirely external to your library and checks if different parts of a library work together correctly.
+
+===== The `tests` directory
+Unlike unit tests, integration tests go into separate directory by name `tests` at the same level as `src` directory.
+Hence, integration tests do not require `#[cfg(test)]` annotation while unit tests does.
+You can have as much integration test files as you want.
+Each file with `test` annotated function(s) is a set of integration tests.
+Hence, each file is compiled as its own separate crate.
+
+[IMPORTANT]
+====
+When you execute:
+----
+cargo test
+----
+all the tests:
+
+* Unit tests
+* Integration tests
+* Doc tests: these are tests for code examples in documentation which can help you in providing an indication to update the documentation if it fails.
+
+When you execute:
+----
+cargo test <test_name>
+----
+the `test_name` above can be a name or the filter of the name of any function which is annotated with `test` attribute, either under unit tests or integration tests.
+
+When you execute:
+----
+cargo test --test <test_name>
+----
+the `test_name` above is the name of a file(without the *.rs* extension) in `tests` folder having an integration test
+====
+
+===== Submodules in Integration Tests
+As each file in `tests` directory is compiled as its own crate, it will be better organized if you group all the test functions by the functionality that they are testing in a single file.
+Moreover, each file compiled as its own crate, will have its own scope just like how would an external code with interact with your library.
+
+You can even organise all the helper code which are not integration test per se but helps to run multiple integration tests in a file under `tests` directory.
+However, as each file is compiled into its own crate, even this helper file gets compiled as its own crate.
+There is no inherent issue with this, you can still import this code into your integration test file like you would import a module into your code.
+However, when you run all the integration tests, even this file will be executed.
+But, as there is no function with `test` annotation in this file, you will see that zero tests were executed.
+Hence, this file will be like a null integration test file.
+
+Instead, rust's convention dictates that you create a directory by name `common` under the `tests` directory and write all your helpers in a file by name `mod.rs` under the `common` directory.
+Now you can import the helpers into your integration test files like you would import a module(rather than an external library) and rust will not treat these files as an integration test.
+
+[NOTE]
+====
+The code under test is imported as an external library, hence you see the `use` construct to bring it into scope.
+But, the helper code for integration test is imported as another module within the integration test crate, hence you see the `mod` construct to bring it into the scope of integration test file.
+====
+
+// what if you want to organize the helper code in "common" directory across multiple files instead of just one file "mod.rs"?
+// no idea how that would work, when time comes we will figure out.
+
+===== Integration Tests for Binary crates
+[NOTE]
+====
+Your project can be just a library, a binary or both.
+Everything depends on the files that are present under `src` directory.
+If `lib.rs` is present it's a library, and if `main.rs` is present it's an executable.
+If both are present, it's both library and an executable program.
+
+As long as you have `lib.rs` is your project you can write unit tests in the same file and also create integration tests under `tests` directory, having a `main.rs` is not going to stop you from running tests.
+
+Hence, if you have both `lib.rs` and `main.rs`, running the command:
+----
+cargo tests
+----
+is going to run the tests and running the command:
+----
+cargo run
+----
+is going to run the executable program.
+====
+
+If your project contains a `main.rs` file under `src` directory, you cannot bring functions from it into the scope of files under `tests` directory even with a `use` statement.
+This is because, unlike code in `lib.rs` which is compiled as a library, code in `main.rs` is compiled as a binary.
+In other words, code under `main.rs` is not exposed for reuse.

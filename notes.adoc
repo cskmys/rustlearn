@@ -23,3 +23,5 @@ include::08_common_collections/notes.adoc[]
 include::09_error_handling/notes.adoc[]
 
 include::10_generics_traits_lifetimes/notes.adoc[]
+
+include::11_automated_tests/notes.adoc[]

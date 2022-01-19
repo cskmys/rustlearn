@@ -1,0 +1,56 @@
+=== How to write tests
+
+Tests are functions that verify that a piece of code is working in the expected manner by performing 3 actions:
+
+* Setting up any needed data or state
+* Running the test code
+* Asserting to make sure that the results are as expected
+
+==== The anatomy of a test function
+The test function is annotated with `test` attribute.
+[NOTE]
+====
+Attributes are metadata about pieces of rust code.
+To add an attribute, add on top of a function:
+----
+#[attribute_name]
+----
+====
+When you run the command:
+----
+cargo test
+----
+rust compiler builds a separate binary to run all the tests i.e. functions with `#[test]` on top of them.
+
+==== Testing Equality with the `assert_eq!` and `assert_ne!` Macros
+Unlike `assert!` marco which only tests if the input parameter is `true` or not, the `assert_eq!` and `assert_ne!` macros internally use operators `==` and `!=` respectively to compare two input parameters and also prints them when the condition fails.
+Hence, the parameters must implement `PartialEq` and `Debug` traits.
+All primitive types and standard library types implement this.
+For user-defined structs and enums this can be derived using `#[derive(PartialEq, Debug)]` unless you need some custom comparison or display.
+
+==== Adding custom failure messages
+Custom messages are useful to document what an assertion means so that you'll hae a better idea of what the problem is with the code when the test fails.
+They can be printed with `assert!`, `assert_eq!` and `assert_ne!` macros.
+Any argument passed after the required argument to `assert!`, or the two required arguments to `assert_eq!` and `assert_ne!` are passed to `format!` marco.
+Hence, you can pass a format string with placeholder(s) `{}` and its values.
+
+==== Checking for panics with `should_panic`
+It is important to check if our code handles errors as we expect.
+One of the ways to handle errors is by panic, we can check if the code panics or not by adding `should_panic` attribute.
+This makes the test pass if the code under test panics.
+
+When a code has multiple points at which it can panic, just using `should_panic` won't be able to know if the panic is happening from the place where we expect it to be or somewhere else.
+To be more precise about the panic we can add an optional `expected` parameter to the `should_panic` attribute
+As the `expected` parameter, a unique substring of expected panic message is entered.
+If panic happened at the expected location, the panic message matches the substring in the `expected` parameter, and `should_panic` test passes, otherwise it fails.
+
+==== Using `Result<T, E>` in tests
+Instead of using `assert` and similar macros which panics on condition failure, we can use `Err` as well to handle condition failure.
+In this case the test function will have a return type of `Result<(), String>`.
+Upon test success you can return `Ok(())` and `Err(String::from("your error message"))` upon test failure.
+
+Using this kind of tests help to use `?` operator in the body of tests.
+[NOTE]
+====
+Here as you are returning `Err` type on failure, you cannot use `should_panic` attribute.
+====
