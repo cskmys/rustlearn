@@ -124,3 +124,6 @@ First write your idea as a very top level pseudocode/algorithm in comments.
 Then translate each line in your pseudocode to code while running the tests to make sure they continue to fail until you have worked through the whole pseudocode.
 
 After this write more failing test cases and iteratively build the code to pass all the possible test cases
+
+==== Integration with `run`
+After you have built your function to your satisfaction, add it to your `run` method directly or indirectly through another function(s) which would call your new function.
