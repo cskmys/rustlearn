@@ -37,10 +37,16 @@ pub fn run(config: Config) -> Result<(), Box<dyn error::Error>>{
 }
 
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-    // iterate through each line of the "contents"
-    // check whether the lie contains our "query":
-    //     if it does, add it to the list values to return
-    //     else, do nothing
+    // iterate through each line of the "contents":
+    //     check whether the lie contains our "query":
+    //         if it does, add it to the list values to return
+    //         else, do nothing
     // return the list of results that match
-    vec![]
+    let mut res = Vec::new();
+    for line in contents.lines() { // "lines()" return an iterator hence you can do a "for" loop on it
+        if line.contains(query){ // "contains" method does all the checking for us
+            res.push(line);
+        }
+    }
+    res
 }
