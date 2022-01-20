@@ -1,6 +1,39 @@
 === Closures: Anonymous functions that can capture their Environment
 
 Closures are anonymous functions that can be saved in a variable or passed as arguments to other functions.
+They are usually short and used within a very narrow context rather than to handle an elaborate scenario.
 
 ==== Creating an abstraction of behavior with closures
+To an extent Closures can be used as type of function pointer in *C/C++*.
+You can for example use it to conditionally apply various algorithms upon same set of inputs.
 
+==== Closure type inference and annotation
+Closures unlike functions do not require annotation of parameters and return types.
+As they are short and used in narrow context, compiler can reliably infer the data types of parameters and return.
+[NOTE]
+====
+We impose annotation requirement on functions but not closures because functions can be exposed to others and making all data types explicit can make things clear to everyone.
+However, closures are mostly local anonymous functions which are not seen by external code.
+====
+
+However, if in case programmer wants to increase the explicitness and clarity, he can annotate them.
+Here are some examples:
+----
+fn add_one_v1(x: u32) -> u32 { x + 1 } // function
+let add_one_v2 = |x: u32| -> u32 { x + 1 }; // annotated closure looks like function
+let add_one_v3 = |x| { x + 1 }; // closure without type annotation
+let add_one_v4 = |x|  x + 1; // for single expression closure "{}" not needed
+----
+[WARNING]
+====
+Closures are not templates meaning only one concrete type is inferred.
+====
+The first usage of the closure defines the concrete type that the compiler is going to infer.
+
+Each closure instance has its own unique anonymous type i.e. even if two closures have the same signature, their types will be considered different.
+In the examples above closures `add_one_v2`, `add_one_v3`, and `add_one_v4` have the same signature, but they are all considered to be of a unique different type.
+
+==== Storing closures using generic parameters and the `Fn` traits
+All closures implement at least of the `Fn`, `FnMut` or `FnOnce` traits provided by the standard library.
+
+To store a closure in a struct, we will need to impose one of the above traits on the structure's generic parameter.
