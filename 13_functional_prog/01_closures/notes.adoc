@@ -37,3 +37,43 @@ In the examples above closures `add_one_v2`, `add_one_v3`, and `add_one_v4` have
 All closures implement at least of the `Fn`, `FnMut` or `FnOnce` traits provided by the standard library.
 
 To store a closure in a struct, we will need to impose one of the above traits on the structure's generic parameter.
+
+==== Capturing the environment with closures
+Closures can also access the variables in the same scope that they are defined in.
+The access can happen in 3 ways, same as how a function can take a parameter, and this is encoded in 3 `Fn` traits which are automatically inferred by compiler based on how the variables from the environment are used:
+
+* `FnOnce`:
++
+Consumes the variables that it captures meaning it takes the ownership of the variables used in it which belong to the same scope that it's defined in.
++
+All closures implement this coz all closures can be called at least once.
+* `FnMut`:
++
+Mutably borrows the variables in same scope, hence it can change their value without taking over the ownership.
++
+Closures that don't move captured variables also implement `FnMut`.
+
+* `Fn`:
++
+Immutably borrows the variables in the same scope, hence it cannot change the value.
++
+Closures that don't mutate captured variables also implement `Fn`.
+
+Even for a complex data type, closures do not automatically take the ownership.
+They need to be forced using the keyword `move` prefixed before the closure.
+[NOTE]
+====
+Though this might seem odd, it is useful in concurrent programming.
+====
+
+[IMPORTANT]
+====
+Though it looks like `move` closures can implement only `FnOnce`, they may still implement `Fn` or `FnMut` coz the traits implemented by a closure are dictated by what the closure does with captured values, not the way it captures them.
+`move` just says the way closure captures the values but not what it does with them.
+====
+
+[TIP]
+====
+When specifying trait bounds, just use `Fn` and do your implementation.
+If `FnMut` or `FnOnce` is required to execute your closure, compiler will tell you, and you can make the necessary changes.
+====
