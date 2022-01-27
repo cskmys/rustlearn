@@ -1,0 +1,45 @@
+=== Processing a series of items with Iterators
+
+The iterator lets you iterate over a series of items to perform some task on them.
+[IMPORTANT]
+====
+In rust iterators are lazy, meaning they have no effect until you call methods that consume the iterator to use it up.
+====
+
+==== The `Iterator` trait and the `next` method
+`Iterator` is a trait defined in standard library, and it declares a method called `next` as follows:
+----
+pub trait Iterator {
+    type Item; // associated type: to implement "Iterator" you need to define a type "Item"
+
+    fn next(&mut self) -> Option<Self::Item>; // "None" or "Item" type(wrapped in "Some") will be returned by iterator
+}
+----
+
+==== Methods that consume the iterator
+`Iterator` trait has a several methods with default implementations in standard library.
+Some methods call `next` and use up the iterator, hence they are called consuming adaptors.
+Consuming adaptors cause lose of ownership of iterators.
+Hence, you cannot reuse and will need to generate a new one if you need an iterator.
+
+==== Methods that produce other iterators
+There are methods in `Iterator` trait called as iterator adaptors which allow you to change iterators into different kinds of iterators.
+[NOTE]
+====
+As iterators are lazy, you'll need to call one of the consuming adaptors on iterator adaptors to get the results.
+====
+
+==== Using closures that capture their environment
+Closures in iterator adaptors can capture the variables from the environment.
+
+==== Creating our own iterators with `Iterator` trait
+To create a custom iterator for any complex data type, you need to declare the associated type and implement the `next` method in the `Iterator` trait.
+After this you can use all the iterator methods in the standard library,
+[NOTE]
+====
+A custom iterator can be for example, an iterator than only counts from 1 to 5.
+====
+[IMPORTANT]
+====
+Iterators can be written for any complex data type, it need not be just for collections.
+====

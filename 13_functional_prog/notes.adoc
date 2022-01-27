@@ -4,3 +4,14 @@ Functional programming often includes using functions as values by passing them 
 Iterators and closures are the key foundation to doing this.
 
 include::01_closures/notes.adoc[]
+
+include::02_iterators/notes.adoc[]
+
+=== Loops vs Iterators
+The intuitive assumption might be that the more low-level loop will be faster than the code with iterators.
+Iterators although a high-level abstraction gets compiled down to roughly same as the lower level code written by hand.
+Rust follows zero-overhead principle from *C++*:
+----
+What you don’t use, you don’t pay for.
+And further: What you do use, you couldn’t hand code any better.
+----

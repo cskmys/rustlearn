@@ -29,3 +29,5 @@ include::11_automated_tests/notes.adoc[]
 include::12_io_project/notes.adoc[]
 
 include::13_functional_prog/notes.adoc[]
+
+include::14_cargo_crates.io/notes.adoc[]

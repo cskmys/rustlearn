@@ -1,0 +1,6 @@
+== More about Cargo and Crates.io
+
+TBD
+
+=== Extending cargo with custom commands
+Cargo can be extended with new subcommands without having to modify cargo.
