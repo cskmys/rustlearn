@@ -48,8 +48,10 @@ To get list of all the configuration parameters and their default values go to h
 
 include::02_publish_crate/notes.adoc[]
 
-=== Cargo Workspaces
-TBD
+include::03_workspace/notes.adoc[]
+
+==== Creating a Workspace
+All packages in a `workspace` share the same `Cargo.lock` file and the output directory.
 
 === Installing binaries from `crates.io` with `cargo install`
 To install binary crates locally:

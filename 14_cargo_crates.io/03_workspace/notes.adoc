@@ -1,0 +1,85 @@
+=== Cargo Workspaces
+
+When a package grows too big it makes sense to split it into multiple library crates.
+A project can contain multiple packages that are being developed in tandem.
+Cargo offers `workspace` to manage such situations.
+
+==== Creating a workspace
+To create a workspace:
+
+* Create a folder
+* Inside that create a `Cargo.toml` file as:
++
+----
+[workspace]
+
+members = [
+    "<crate_name>",
+]
+----
+* Use the `cargo new` command in this folder to create a crate by name <crate_name> within this folder
+* After this, your folder structure should look like:
++
+----
+|-- Cargo.lock
+|-- Cargo.toml
+|-- <crate_name>
+|   '-- Cargo.toml
+|   '-- src
+|       '-- <main or lib>.rs
+'-- target
+----
++
+The whole workspace has one `Cargo.lock` and `target` folder where all the compiled artifacts are placed.
+None of the crates have their own `target` directory or `Cargo.lock` file even if you run `cargo build` from within their directory.
++
+[NOTE]
+====
+While inside a workspace, to run a specific binary crate instead of the whole workspace you can either do `cargo run` from within that binary crate's directory or at the workspace directory you can do:
+
+----
+cargo run -p <bin_crate>
+----
+====
++
+One `target` directory ensures that all code is compiled in one place and one `Cargo.lock` file ensures that all crates use the same version of all dependencies.
+Doing this will ensure that all crates within a workspace are compatible with each other.
+* Whenever you create more crates, keep updating the `members` field in the workspace's `Cargo.toml` file.
+
+==== Calling one crate in another
+
+* To include one crate in another, you need to create a dependency of caller on the callee.
+To do that go to the caller crate's `Cargo.toml` file and under `[dependencies]` section add:
++
+----
+<callee_crate> = { path = "../<callee_crate>" }
+----
+* To include an external crate from `crates.io`, go to the `[dependencies]` section of `Cargo.toml` file of the crate in which you would like to include the external crate and do:
++
+----
+<ext_crate> = "<ver_no>"
+----
++
+[NOTE]
+====
+Adding an external crate to one crate in the workspace doesn't make it available to other crates in the workspace.
+Hence, if an external crate is required across multiple crates in the workspace, it needs to be individually added to each of the crate as described above.
+====
++
+[IMPORTANT]
+====
+You cannot use different versions of external crate across different crates.
+All crates in the workspace that need it must include the same version of the external crate.
+====
+
+==== Adding a Test to a Workspace
+You can add tests for each individual crates.
+Running `cargo test` in the workspace directory will run tests(unit, integration and doc) for all the crates.
+To run a test for a specific crate you can go inside that directory and run `cargo test` or at the workspace directory you can do:
+----
+cargo test -p <crate_name>
+----
+
+==== Publishing a workspace
+You need to do `cargo publish` individually in each of the crate's folder inside the workspace to publish it.
+There is no command to publish all the crates in the workspace together, and also there is no `cargo publish` with `-p` option which you can execute at the workspace level to publish an individual crate from the workspace folder level.
