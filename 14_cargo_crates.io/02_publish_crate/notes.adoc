@@ -1,0 +1,172 @@
+=== Publishing a crate to `crates.io`
+You can publish your code as packages which can be used by other people.
+A registry of crates is maintained at `crates.io`.
+[NOTE]
+====
+The crate registry at `crates.io` distributes source code of packages, so the packages hosted are primarily open source.
+====
+
+To publish your crate you need to:
+
+* setup cargo
+* specify required metadata
+
+==== Setting up `crates.io` account
+To create an account:
+
+* Go to https://crates.io/[`crates.io`]
+* Login via your Github account
++
+[NOTE]
+====
+The first time you do this, you'll need to authorize rust-lang to access your github account
+====
+
+Get your access token:
+
+* After login, go to your https://crates.io/me/[account settings]
+* Go to https://crates.io/settings/tokens[API Tokens]
+* Click `New Token`, give it a name and click `Create`
+* You'll see a string, this string is your token.
++
+[WARNING]
+====
+Copy your token and save it somewhere secure coz once you close/refresh the tab, you'll never be able to see it again.
+
+Do not share your token with anyone.
+In case you do it for whatever the reason, after the job is done, revoke it and generate a new one.
+====
+
+Setup cargo to use your `crates.io` account:
+----
+cargo login <token>
+----
+Now the token in stored locally in `~/.cargo/credentials`
+
+==== Making useful documentation comments
+Good documentation helps and encourages other people to use your package.
+Rust has provision to write documentation comment and generate HTML documentation from it.
+Documentation comments use 3 slashes `///` and supports Markdown notation for formatting.
+The documentation is written right above the api that is being documented.
+You can also provide an example of api usage.
+All this is used to generate a html documentation in `target/<prj_name>/doc` upon running the command:
+----
+cargo doc
+----
+[NOTE]
+====
+You can open `target/doc/<prj_name>/index.html` in your browser to see the documentation.
+Alternatively you can also do
+----
+cargo doc --open
+----
+to generate documentation and automatically open it in the default browser.
+====
+
+===== Commonly used sections
+Developers normally use documentation comments to list the following sections:
+
+* Panics: describe scenarios when the code panics
+* Errors: If a function returns `Result` type, then it is helpful to describe the types of error and the conditions that they occur
+* Safety: If a function is `unsafe`, there needs to be an explanation as to why and also the expectations that the callers need to uphold to keep it safe
+
+===== Documentation comments as Tests
+Example code blocks in documentation comments demo library usage.
+What's worse than no example?
+An example that doesn't work!
+In rust these code blocks can also be tested when tests are run using:
+----
+cargo test
+----
+This will prevent documentation from having examples that do not work.
+
+===== Commenting Contained Items
+If you want to write some standalone documentation rather than documenting the following piece of code, you can use `//!`.
+
+This type of documentation is used to describe the overall crate or module rather than an api.
+
+==== Exporting a convenient public API with `pub use`
+The organization of a crate that makes sense to developers might not make sense to users.
+While development, a public method or structure might be defined deep in the hierarchy.
+In this case the user will have to go through levels of your code to use a type or an api, and they might not even be able to find out that such a type exists.
+Moreover, it is annoying to have to enter multiple levels to import your code into their code using the `use` statement.
+
+To make it convenient for users, you don't have to reorganize your code hierarchy.
+Rust has `pub use` construct which allows you to take public items in one location and make it public in another location as if it were defined in that location.
+Hence, your public api can have a hierarchy that is entirely different from internal code hierarchy.
+
+==== Adding metadata to a new crate
+Crate metadata is added to `Cargo.toml` file under the section `[package]`.
+You cannot publish your crate on `crates.io` without crate metadata such as:
+
+* name
+* description
+* license
+
+===== name
+You can find the crate name under the `name` field in `[package]` section in `Cargo.toml` file.
+[WARNING]
+====
+If you are going to publish your crate on `crates.io`, your crate name should be unique.
+Hence, search before on `crates.io` to see if your crate name is already taken.
+If it is, then you'll need to change the name of your crate.
+====
+
+===== description
+Just write a sentence or two about what your crate does under the `description` field.
+It will appear with your crate under the search results.
+
+===== license
+License tells people under what terms they can use your crate.
+You can use a license identifier value present in linux foundation's spdx(software package data exchange) https://spdx.org/licenses/[list] under `license` field.
+[NOTE]
+====
+You can use dual licenses by using `OR` identifier to concatenate spdx identifiers under the `license` field as:
+
+----
+[package]
+name = "guessing_game"
+version = "0.1.0"
+edition = "2018"
+description = "A fun game where you guess what number the computer has chosen."
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+----
+====
+
+Alternatively, if you want to specify your own license, then you can write a license file include it in your project and specify it under the `license-file` field.
+
+==== Publishing to `crates.io`
+After you have logged in with cargo using your token, and you have set up your crate with all necessary metadata, you can publish using:
+----
+cargo publish
+----
+
+[WARNING]
+====
+Once published, the code is permanent!
+It cannot be overwritten under the same version number or deleted.
+The only way to update your code is make a new version.
+====
+
+==== Publishing a new version of an existing crate
+Once you have made changes to your code, change the version number under the `version` field in `[package]` section in `Cargo.toml` file and run `cargo publish`.
+[IMPORTANT]
+====
+Use semantic versioning https://semver.org/[rules] to decide version number.
+====
+
+==== Removing versions from `crates.io` with `cargo yank`
+You can prevent any future projects from adding any of your previous version as a dependency using:
+----
+cargo yank --vers <version number>
+----
+[NOTE]
+====
+`yank` does not delete any code, it just prevents it as being added as a dependency by another project
+====
+You can undo a yank using:
+----
+cargo yank --vers <version number> --undo
+----

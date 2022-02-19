@@ -1,6 +1,76 @@
-== More about Cargo and Crates.io
+== More about Cargo and `crates.io`
 
+Rust standard library is small and stable.
+For anything additional there is vast selection of crates on `crates.io`.
+Sharing code with cargo and `crates.io` is one of the things that makes rust ecosystem useful for many tasks.
+
+=== Customizing builds with release profiles
+In rust, release profiles are predefined, customizable, and independent configurations for compiling the code.
+
+Cargo has 2 main profiles:
+
+* `dev`
++
+Command
++
+----
+cargo build
+----
++
+Has good defaults for development
+* `release`
++
+Command
++
+----
+cargo build --release
+----
++
+Has good defaults for release builds
+
+
+Cargo has default settings for the profiles when there aren't any `profile.\*` section in `Cargo.toml`.
+To override default settings, you can add `[profile.*]` for the profile that you plan to override.
+For example to override the optimization level across `dev` and `release`:
+----
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+opt-level = 2
+----
+This will compile the code in optimization level 1 instead of 0 in development mode and level 2 instead of 3 in release mode.
+
+[NOTE]
+====
+To get list of all the configuration parameters and their default values go to https://https://doc.rust-lang.org/cargo/reference/profiles.html[cargo's documentation].
+====
+
+include::02_publish_crate/notes.adoc[]
+
+=== Cargo Workspaces
 TBD
 
+=== Installing binaries from `crates.io` with `cargo install`
+To install binary crates locally:
+----
+cargo install <binary_name>
+----
+All binary installed through this command are stored in the */bin* folder.
+[NOTE]
+====
+It isn’t intended to replace system packages; it’s meant to be a convenient way for Rust developers to install tools that others have shared on `crates.io`
+====
+[WARNING]
+====
+If you have installed rust using `rustup.rs` then the binary will be installed at `$HOME/.cargo/bin`.
+In that case to run the program from terminal make sure that `$HOME/.cargo/bin` is in your environment variable `PATH`.
+====
+
 === Extending cargo with custom commands
-Cargo can be extended with new subcommands without having to modify cargo.
+Cargo can be extended with new subcommands without modifying it.
+If you want to run a binary in your `/bin` folder present in your `PATH` variable, you can do:
+----
+cargo <bin_nam>
+----
+if the binary is named as `cargo-<bin_nam>`.
