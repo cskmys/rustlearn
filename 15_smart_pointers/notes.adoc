@@ -17,4 +17,8 @@ There are several types of smart pointers in Rust and moreover several libraries
 Here whatever is discussed are the most used types from the standard library.
 ====
 
-include::01_Box_T/notes.adoc[]
+include::01_box/notes.adoc[]
+
+include::02_deref/notes.adoc[]
+
+include::03_drop/notes.adoc[]

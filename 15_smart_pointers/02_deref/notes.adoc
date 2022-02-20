@@ -1,0 +1,46 @@
+=== Treating smart pointers like regular references with the `Deref` trait
+
+`Deref` trait allows to customize the behavior of the dereference operator `*`.
+This trait allows smart pointer to be treated like a regular reference by making it possible to use derefence operator `*`.
+Hence, code with smart pointer can use code that operates on references too.
+
+==== Treating a type like a reference by implementing the `Deref` trait
+You'll need to implement `Deref` trait of `std::ops` to make it possible to use derefence operator `*` on a smart pointer.
+After implementation of this trait, `*smart_pointer` gets transalted into:
+----
+*(smart_pointer.deref())
+----
+Hence, the trait must return the reference to the data so that the dereference operator `*` can dereference it and give access to the data.
+
+==== Implicit `Deref` coercions with Functions and Methods
+On types that implement `Deref` trait rust performs `deref` coercion when they are passed as an argument to a function or a method.
+
+`String` implements `Deref` trait and upon `deref` method it returns `&str`.
+Hence, whenever you pass `&String` to a function or a method that accepts `&str` argument, rust automatically calls `deref` of `Deref` trait and passes the data returned by it which is of type `&str` to the function or method as the argument.
+
+This not only allows smart pointers to use code that is written for regular references but also makes code more readable.
+[NOTE]
+====
+deref coercion is performed at compile time, hence there is no performance penalty during runtime
+====
+
+==== How Deref coercion interacts with Mutability
+Just like how `Deref` trait was used to customize the behavior of the dereference operator `*` on immutable references, `DerefMut` trait can be used for the same on mutable references.
+
+Rust does deref coercion in 3 cases:
+
+* From `&T` to `&U` when `T: Deref<Target=U>`
++
+Example, `&String` coerced as `&str`
+* From `&mut T` to `&mut U` when `T: DerefMut<Target=U>`
+* From `&mut T` to `&U` when `T: Deref<Target=U>`
++
+Here rust is coercing a mutable reference into an immutable one.
+Doing this will not break any borrowing rules as there can be any number of immutable references in a given scope.
++
+[NOTE]
+====
+An immutable reference will never be coerced as a mutable one.
+To preserve borrowing rules when such a coercion happens either all other immutable references needs to be invalidated or such a coercion will need to be allowed only when there is only one (immutable) reference(the one that is being coerced into mutable) is present.
+Instead of all that headache, better to not allow such a coercion
+====

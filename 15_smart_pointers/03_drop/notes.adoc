@@ -1,0 +1,3 @@
+=== Running code on cleanup with the `Drop` trait
+
+TBD
