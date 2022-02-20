@@ -1,0 +1,20 @@
+== Smart Pointers
+
+A pointer is a variable that contains an address of another data in memory.
+The most common type of pointer in Rust is a reference indicated by `&`.
+They can only borrow the data(& can't own it), and they don't have any special capabilities & overheads.
+
+Smart pointers are data structures implemented as `struct` that not only act like a pointer but also have additional metadata(hence, overhead) and capabilities.
+Smart pointers can own the data that they point to.
+So they can have traits such as `Deref` and `Drop`.
+`Deref` allows the instance of smart pointer to behave like a reference and `Drop` allows you to customize the code that is run when the smart pointer goes out of scope.
+
+`String` and `Vec<T>` are smart pointers which own a piece of memory, contains additional metadata(ex, length) and has extra capabilities(ex, `String` ensures that its data is always a valid UTF-8).
+
+[NOTE]
+====
+There are several types of smart pointers in Rust and moreover several libraries have their own types.
+Here whatever is discussed are the most used types from the standard library.
+====
+
+include::01_Box_T/notes.adoc[]

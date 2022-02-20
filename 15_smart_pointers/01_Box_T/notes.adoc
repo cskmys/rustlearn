@@ -1,0 +1,42 @@
+=== Using `Box<T>` tp point to data on the heap
+
+Box is a smart pointer written as `Box<T>` which allows you to store data on heap rather than the stack.
+The only performance overhead they have is, the heap memory management.
+Boxes implement both the `Deref` and `Drop` traits.
+
+They are used when you:
+
+* Have a type whose size is not known at compile time, and you want to use a value of that type in a context that requires exact size
+* Have a large amount of data, and you want to transfer its ownership without making copy of the data when you do so.
++
+In this case, you can put the data on the heap, and have a pointer to the data on the stack.
+When you want to transfer the ownership, all you need to do is transfer the ownership of the pointer.
+This way you transfer the ownership of the data without actually making its copy.
+* Want to own a value where we care only about the trait implemented by the value's type rather than the type itself.
+
+==== Using a `Box<T>` to store data on the heap
+You can use `new` api to allocate a data on the heap.
+The variable i.e. pointer to this data is stored on the stack.
+When the variable goes out of scope, the variable itself on the stack, and the data that it points to on the heap are both cleared.
+
+==== Enabling Recursive types with Boxes
+In a recursive type a value can have as a part of itself another value of same time.
+This nesting of values can continue infinitely.
+Hence, its size cannot be known at compile time.
+But, Rust compiler needs to know the type sizes at compile time.
+You can work around this limitation by putting the recursive type's base value inside a box.
+
+Example: `cons list` is a data structure with a pair of fields , of which one is a value and the other is a pair of same type.
+[TIP]
+====
+`cons list` seems like singly-linked linked-list
+====
+
+In other words, each item in this type of list contains a value of the current item and the next item.
+
+[NOTE]
+====
+`cons list` is not commonly used data structure in rust.
+In most cases, `Vec<T>` is a better choice to deal with list of items.
+====
+

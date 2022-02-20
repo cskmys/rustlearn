@@ -31,3 +31,5 @@ include::12_io_project/notes.adoc[]
 include::13_functional_prog/notes.adoc[]
 
 include::14_cargo_crates.io/notes.adoc[]
+
+include::15_smart_pointers/notes.adoc[]
