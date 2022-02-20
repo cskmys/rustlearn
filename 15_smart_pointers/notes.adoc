@@ -22,3 +22,5 @@ include::01_box/notes.adoc[]
 include::02_deref/notes.adoc[]
 
 include::03_drop/notes.adoc[]
+
+include::04_ref_cnt/notes.adoc[]

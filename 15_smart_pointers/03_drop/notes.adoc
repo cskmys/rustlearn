@@ -1,3 +1,25 @@
 === Running code on cleanup with the `Drop` trait
 
-TBD
+In rust, whenever a variable(of any type) goes out of scope its `Drop` trait's `drop` method is automatically called.
+Hence, you don't need to worry about placing clean-up code to avoid leaks.
+Normally this is used to release any resources such as a file or a network connection.
+
+By implementing `Drop` trait we can customize the behavior of a smart pointer when it goes out of scope.
+[NOTE]
+====
+Within a scope variables are dropped in the reverse order of their creation.
+This is due to variables being stored on a stack.
+A stack is a "first in last out" (conversely "last in fast out") data structure.
+====
+
+==== Dropping a value early with `std::mem::drop`
+Sometimes you may want to clean up a value early like in the case of a mutex where you want to force `Drop` trait's `drop` method to execute to release the current lock before another code in same scope can acquire it.
+
+In such cases you cannot manually call `Drop` trait's `drop` method.
+Doing so will throw a compilation error, this is done to prevent double frees from occurring.
+You cannot disable automatic insertion of `drop` at end of scope and we cannot manually call `drop` method too instead, you can call `std::mem::drop`.
+[NOTE]
+====
+`std::mem` is part of prelude, hence no need to import it via `use` statement.
+====
+
