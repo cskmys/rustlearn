@@ -1,3 +1,32 @@
 === `Rc<T>`, the Reference Counted smart pointer
 
-TBD
+In most cases, it is very clear which variable owns a given value.
+However, sometimes a single value can have multiple owners.
+Example, in a graph multiple edges can point to the same node, hence conceptually that node is owned by all the edges that point to it.
+In this case, the node shouldn't be cleaned up unless it doesn't have any edges pointing to it.
+
+To enable multiple ownership Rust has reference counting `Rc<T>`.
+It keeps track of the number of references that has borrowed the value to determine whether the value in still in use.
+If there are zero references to a value, then the value can be cleaned up.
+
+[TIP]
+====
+This datatype is useful when you want to allocate data on the heap which can be read by multiple parts of your program, and you can't determine at compile time which part will finish using the data last.
+====
+
+==== Using `Rc<T>` to share data
+`Rc<T>` can be used to share data between multiple variables.
+To do the sharing and reference counting `Rc::clone` function is used.
+`Rc::clone` doesn't make a deep copy like `clone` of most types do, it just increases the reference count.
+[WARNING]
+====
+When looking for performance issues you need to clearly check the type of variable which is calling a `clone` function to know if it does deep copy or reference counting.
+====
+
+==== Cloning an `Rc<T>` increases the reference count
+`Rc::clone` increments the reference count and `Drop` automatically decrements the count.
+When the variable going out of scope decrements the count to 0, the memory is cleared as well.
+Otherwise, the memory is untouched and just the variable is invalidated.
+
+`Rc<T>` uses immutable references, hence it allows you to share data as read-only.
+If `Rc<T>` used mutable references, you might violate borrowing rules by letting a memory have multiple mutable references(which can cause data race and corruption).
