@@ -1,0 +1,44 @@
+=== `RefCell<T>` and the Interior Mutability pattern
+
+Normally, when as per borrowing rules, mutating of data is not allowed when there are immutable references to that data.
+In rust in such a situation, a design pattern called Interior mutability which has `unsafe` code inside a data structure is used to bend borrowing rules to mutate data.
+
+==== Enforcing borrowing rules at Runtime with `RefCell<T>`
+Applying rules at compile time will prevent potential bugs without any impact on runtime performance.
+But, some analyses are impossible to perform and the compiler being very conservative about safety might reject a correct program(Ex: Halting program).
+This is better than allowing an unsafe program to compile coz allowing an unsafe program is dangerous while not allowing a correct program is not going to lead to catastrophe, but it is just an inconvenience to developers.
+
+In such scenarios `RefCell<T>` is used.
+Normally, the borrowing rules are enforced during compile time and breaking them leads to compilation error, but when `RefCell<T>` is used they are enforced during runtime and breaking them leads to `panic`.
+[NOTE]
+====
+`RefCell<T>` is only intended for single thread scenarios and using it in multithreaded context will give you compilation error.
+====
+
+==== Interior mutability: A mutable borrow to an immutable value
+In some cases it would be better if a value can mutate itself in its methods but appear immutable to other code.
+`RefCell<T>` allows you to do that.
+
+===== A use case for interior mutability: Mock objects
+A test double is a code used in place of another during testing.
+Mock objects are a specific type of test double which records what happens during a test so that you can assert to make sure that right actions took place.
+
+===== Keeping track of borrows at runtime with `RefCell<T>`
+`RefCell<T>` has `borrow` and `borrow_mut` methods which returns smart pointers `Ref<T>` and `RefMut<T>` respectively both of which implement `Deref` trait.
+Hence, we can treat them like regular references `&` and `&mut`.
+
+`RefCell<T>` keeps track of how many `Ref<T>` and `RefMut<T>` are active currently by incrementing a counter everytime you'd call a `borrow` and `borrow_mut` and decrementing a counter everytime a `Ref<T>` and `RefMut<T>` goes out of scope and its `Drop` trait is called.
+
+By checking how many mutable and immutable borrows exist during runtime, `RefCell<T>` makes it possible to enforce borrow rules at the runtime.
+When any of the rules is violated, `RefCell<T>` calls `panic!`.
+
+This way using `RefCell<T>` we can work around the conservativeness of the compiler.
+However, as a trade-off catching borrow errors during runtime rather than compile time means you'll find errors later in the development process, and also you sacrifice a little performance to perform this check during runtime.
+
+==== Having multiple owners of mutable data by combining `Rc<T>` and `RefCell<T>`
+`Rc<T>` allows one to have multiple owners of some data in an immutable manner.
+`RefCell<T>` allows you to mutate immutable data.
+Hence, by using `RefCell<T>` inside `Rc<T>` i,e, `Rc<RefCell<T>>` we can have multiple owners of data who can mutate.
+
+But again, runtime checks are performed to ensure that borrowing rules are not violated to prevent data races etc.
+Sometimes it might be worth trading some amount of performance for neat code.
