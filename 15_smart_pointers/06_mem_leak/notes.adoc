@@ -1,0 +1,42 @@
+=== Reference Cycles can leak Memory
+
+Rust compiler guarantees disallowing data races but not memory leaks.
+It makes it difficult to have memory leaks but not entirely impossible.
+For example by using `Rc<T>`, and `RefCell<T>` it is possible to create cyclic references i.e. references where items refer to each other in a cycle.
+In such a case the reference count of each item in the cycle will never reach 0 and the values will never be dropped.
+
+==== Creating a Reference cycle
+It is not easy to create reference cycles in rust, but not impossible.
+When you use types that does reference counting(ex. `Rc<T>`), interior mutability(ex. `RefCell<T>`) and a nested combination of both(ex. `Rc<RefCell<T>>`) you need to extra careful that there is no reference cycling as rust can fail to catch them.
+
+Reference cycle is a logical bug which you need to weed out by automated tests, code reviews etc.
+A better solution is to reorganize data structures in order to avoid it altogether.
+Along these lines, you can have some references to have ownership and some don't.
+Hence, cycles can be made up of some ownership relationships and some non-ownership relationships and only ownership relationships affect whether a value will be dropped or not.
+
+==== Preventing Reference cycles: Turning an `Rc<T>` into a `Weak<T>`
+`Rc::Clone` creates a 'strong' reference of type `Rc<T>` and increases the `strong_count` of `Rc<T>` and `Rc<T>` is cleaned up only if `strong_count` is 0.
+There is another api `Rc::downgrade` which creates a 'weak' reference of type `Weak<T>` and increases the `weak_count`, and `weak_count` has no impact in determining if `Rc<T>` will be cleaned up or not.
+
+A strong reference allows you to share ownership of `Rc<T>` while a weak reference don't deal with ownership.
+Using weak reference won't cause memory leaks coz when the `strong_count` is 0, the memory gets cleaned up.
+
+As `weak_count` doesn't determine if `Rc<T>` value is cleaned up or not, values referenced by a weak reference might have been dropped, and we will need to check if they exist before doing anything with them.
+To check you will need to do `Rc::upgrade` on `Weak<T>`, if the value exists you'll get `Some<Rc<T>>` and else you'll get `None`.
+
+[NOTE]
+====
+After creation of `Rc<T>` its `strong_count` is 1 and `weak_count` is 0.
+
+If you do:
+----
+xyz = Rc::clone(&abc)
+----
+then `strong_count` of `abc` increments by 1 as `Rc::clone` is acting on `abc` to produce `Rc<T>`.
+
+If you do:
+----
+xyz = Rc::downgrade(&abc)
+----
+then `weak_count` of `abc` increments by 1 as `Rc::downgrade` is acting on `abc` to produce `Weak<T>`
+====
